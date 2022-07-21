@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface DarkModeSwitch {
-    value: string
+    isDarkModeOn: boolean
   }
   
   const initialState: DarkModeSwitch = {
-    value: 'dark',
+    isDarkModeOn: true,
   }
   
   export const DarkModeSwitch = createSlice({
@@ -18,10 +18,10 @@ export interface DarkModeSwitch {
         // doesn't actually mutate the state because it uses the Immer library,
         // which detects changes to a "draft state" and produces a brand new
         // immutable state based off those changes
-        if(state.value === 'dark')
-        state.value = 'light';
-        else if(state.value === 'light')
-        state.value = 'dark';        
+        if(state.isDarkModeOn === true)
+        state.isDarkModeOn = false;
+        else if(state.isDarkModeOn === false)
+        state.isDarkModeOn = true;        
       }
     },
   })

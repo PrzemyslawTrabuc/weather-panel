@@ -6,17 +6,18 @@ import type { RootState } from '../../store/store';
 
 
 const DarkModeSwitch = () => {
-  const dark = useSelector((state: RootState) => state.DarkModeSwitch.value);
+  const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
   const dispatch = useDispatch();
 
     return (
       <ActionIcon
         variant="outline"
-        color={dark === 'dark' ? 'yellow' : 'blue'}
+        color={isDarkModeOn === true ? 'yellow' : 'blue'}
         onClick={() => dispatch(toggleDarkMode())}
         title="Toggle color scheme"
+        size="md"
       >
-        {dark === 'dark'? <Sun size={18} /> : <MoonStars size={18} />}
+        {isDarkModeOn === true ? <Sun size={18} /> : <MoonStars size={18} />}
       </ActionIcon>
     );
   }

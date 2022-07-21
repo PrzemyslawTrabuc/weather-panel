@@ -7,8 +7,9 @@ import { signIn } from "./GoogleAuthSlice";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.DarkModeSwitch.value);
+  const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
+  const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
 
   function parseJwt(token: string) {
     var base64Url = token.split(".")[1];
@@ -33,7 +34,7 @@ const GoogleAuth = () => {
   };
 
   useEffect(() => {
-    console.log("dupa")
+    if(!userId){
     window.google.accounts.id.initialize({
       client_id:
         "1030502307448-nmhaj2n273ahcd1ededol73i83arfotc.apps.googleusercontent.com",
@@ -42,9 +43,10 @@ const GoogleAuth = () => {
     });
     window.google.accounts.id.renderButton(
       document.getElementById("googleSignIn"),
-      { theme: dark === 'dark' ? "filled_black" : "filled_blue" , size: "medium", type: isDesktop ? "" : "icon"}
+      { theme: isDarkModeOn === true ? "filled_black" : "filled_blue" , size: "medium", type: isDesktop ? "" : "icon"}
     );
-  },[isDesktop, dark]);
+    }
+  },[isDesktop, isDarkModeOn]);
 
   return <div id="googleSignIn"></div>;
 };

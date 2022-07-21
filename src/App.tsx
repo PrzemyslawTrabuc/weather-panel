@@ -7,10 +7,10 @@ import type { RootState } from './store/store';
 import { useSelector, useDispatch } from 'react-redux';
 
 const App =()=> {
-  const dark = useSelector((state: RootState) => state.DarkModeSwitch.value);
+  const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
 
   return (     
-        <MantineProvider theme={{colorScheme: dark}} withGlobalStyles withNormalizeCSS>
+        <MantineProvider theme={{colorScheme: isDarkModeOn ? "dark" : "light"}} withGlobalStyles withNormalizeCSS>
           <AppContainer />
         </MantineProvider>
   )
