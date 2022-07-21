@@ -8,8 +8,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^4.2.12",
+    "@mantine/hooks": "^4.2.12",
+    "@reduxjs/toolkit": "^1.8.3",
+    "axios": "^0.27.2",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.2",
+    "tabler-icons-react": "^1.53.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
