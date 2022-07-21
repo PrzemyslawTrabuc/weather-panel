@@ -10,7 +10,7 @@ const DarkModeSwitch = () => {
   const dispatch = useDispatch();
 
     return (
-      <ActionIcon style={{position: 'absolute', right:'5%'}}
+      <ActionIcon
         variant="outline"
         color={dark === 'dark' ? 'yellow' : 'blue'}
         onClick={() => dispatch(toggleDarkMode())}

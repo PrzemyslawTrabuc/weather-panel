@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppShell,
   Navbar,
@@ -15,14 +15,15 @@ import {
 import { BrandGithub } from 'tabler-icons-react';
 import type { RootState } from '../store/store';
 
-import DarkModeSwitch from './DarkModeSwitch/DarkModeSwitch';
 import { useSelector } from 'react-redux';
-import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch'
+import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch';
+import RightMenu from './RightMenu';
 
 
 export default function AppContainer() {
   const theme = useMantineTheme();
-  const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.value);
+  const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
+  const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
 
   return (
     <AppShell
@@ -35,20 +36,21 @@ export default function AppContainer() {
       asideOffsetBreakpoint="sm"
       fixed
       navbar={
-        <Transition mounted={isMenuOpen} transition="fade" duration={400} timingFunction="ease">
-          {(styles) => 
-          <Navbar style={styles} p="md" hiddenBreakpoint="sm" hidden={!isMenuOpen} width={{ sm: 200, lg: 300 }}>
+        <Transition mounted={isDesktop ? true : isMenuOpen} transition="fade" duration={400} timingFunction="ease">
+          {(styles) =>
+          <Navbar style={styles} p="md" hiddenBreakpoint="sm" hidden={!isMenuOpen}width={{ sm: 200, lg: 300 }}>
             <Text>Test</Text>
           </Navbar>
       }
-        </Transition>
+        </Transition>  
+              
       }
       header={
         <Header height={70} p="md">
           <div style={{ display: 'flex', alignItems: 'center', height: '100%', width: '100%'}}>         
               <MobileMenuSwitch />
             <Text>WeatherPanel</Text>
-              <DarkModeSwitch></DarkModeSwitch>
+              <RightMenu></RightMenu>
           </div>
         </Header>
       }
