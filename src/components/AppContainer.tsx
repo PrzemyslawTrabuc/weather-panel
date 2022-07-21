@@ -9,13 +9,20 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
-  Center
+  Center,
+  Transition
 } from '@mantine/core';
-import DarkModeSwitch from './DarkModeSwitch/DarkModeSwitch'
+import { BrandGithub } from 'tabler-icons-react';
+import type { RootState } from '../store/store';
+
+import DarkModeSwitch from './DarkModeSwitch/DarkModeSwitch';
+import { useSelector } from 'react-redux';
+import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch'
+
 
 export default function AppContainer() {
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+  const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.value);
 
   return (
     <AppShell
@@ -28,31 +35,29 @@ export default function AppContainer() {
       asideOffsetBreakpoint="sm"
       fixed
       navbar={
-        <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
-          <Text>Application navbar</Text>
-        </Navbar>
+        <Transition mounted={isMenuOpen} transition="fade" duration={400} timingFunction="ease">
+          {(styles) => 
+          <Navbar style={styles} p="md" hiddenBreakpoint="sm" hidden={!isMenuOpen} width={{ sm: 200, lg: 300 }}>
+            <Text>Test</Text>
+          </Navbar>
       }
-      footer={
-        <Footer height={60} p="md">
-          <Text component='a' href="https://github.com/PrzemyslawTrabuc/weather-panel">GitHub: https://github.com/PrzemyslawTrabuc/weather-panel</Text>
-        </Footer>
+        </Transition>
       }
       header={
         <Header height={70} p="md">
-          <div style={{ display: 'flex', alignItems: 'center', height: '100%', width: '100%'}}>
-            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery>
+          <div style={{ display: 'flex', alignItems: 'center', height: '100%', width: '100%'}}>         
+              <MobileMenuSwitch />
             <Text>WeatherPanel</Text>
               <DarkModeSwitch></DarkModeSwitch>
           </div>
         </Header>
+      }
+      footer={
+        <Footer height={60} p="md">
+          <Center>
+            <Text component='a' href="https://github.com/PrzemyslawTrabuc/weather-panel"><BrandGithub /> Przemysław Trabuć </Text>
+          </Center>
+        </Footer>
       }
     >
       <Text>Resize app to see responsive navbar in action</Text>

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import DarkModeSwitchReducer from '../components/DarkModeSwitch/DarkModeSwitchSlice' 
+import MobileMenuReducer from '../components/MobileMenu/MobileMenuSwitchSlice';
 
 export const store = configureStore({
   reducer: {
     DarkModeSwitch: DarkModeSwitchReducer,
+    MobileMenuSwitch: MobileMenuReducer
   },
 })
 
