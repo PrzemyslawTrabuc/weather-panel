@@ -18,7 +18,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch';
 import RightMenu from './RightMenu';
-import { getWeather, fetchWeatherThunk} from './WeatherData/WeatherDataSlice'
+import { getWeather, fetchWeatherThunk} from './WeatherData/WeatherDataSlice';
+import WeatherCard from './Weather/WeatherCard';
 
 
 export default function AppContainer() {
@@ -35,7 +36,7 @@ export default function AppContainer() {
     <AppShell
       styles={{
         main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.light,
+          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
         },
       }}
       navbarOffsetBreakpoint="sm"
@@ -68,7 +69,9 @@ export default function AppContainer() {
         </Footer>
       }
     >
-      <Text>Resize app to see responsive navbar in action</Text>
+   {/* MAIN AREA */}
+      <WeatherCard weatherData={useSelector((state: RootState) => state.WeatherData)}></WeatherCard>
+   {/* MAIN AREA */}
     </AppShell>
   );
 }

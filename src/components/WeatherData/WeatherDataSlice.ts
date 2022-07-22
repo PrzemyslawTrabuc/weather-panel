@@ -8,15 +8,16 @@ export interface WeatherData {
     cityName: string,
     temp: number,
     sunrise: string,
-    sunset: string
-
+    sunset: string,
+    weatherIconId: string
   }
   
   const initialState: WeatherData = {
     cityName: "",
     temp: 0,
     sunrise: '',
-    sunset: ''
+    sunset: '',
+    weatherIconId: ''
   }
   
   const fetchWeatherThunk = createAsyncThunk(
@@ -48,6 +49,7 @@ export interface WeatherData {
           state.temp = action.payload.main.temp;     
           state.sunrise = convertUnixTime(action.payload.sys.sunrise);  
           state.sunset = convertUnixTime(action.payload.sys.sunset);  
+          state.weatherIconId = action.payload.weather[0].icon;
         })
       },
     })
