@@ -2,12 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import DarkModeSwitchReducer from '../components/DarkModeSwitch/DarkModeSwitchSlice' 
 import MobileMenuReducer from '../components/MobileMenu/MobileMenuSwitchSlice';
 import GoogleAuthReducer from '../components/GoogleAuth/GoogleAuthSlice';
+import WeatherDataReducer from '../components/WeatherData/WeatherDataSlice';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 export const store = configureStore({
   reducer: {
     DarkModeSwitch: DarkModeSwitchReducer,
     MobileMenuSwitch: MobileMenuReducer,
-    GoogleAuth: GoogleAuthReducer
+    GoogleAuth: GoogleAuthReducer,
+    WeatherData: WeatherDataReducer
   },
 })
 

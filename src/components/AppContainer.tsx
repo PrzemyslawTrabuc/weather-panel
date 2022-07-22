@@ -13,17 +13,23 @@ import {
   Transition
 } from '@mantine/core';
 import { BrandGithub } from 'tabler-icons-react';
-import type { RootState } from '../store/store';
+import type { RootState, AppDispatch } from '../store/store';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { useSelector } from 'react-redux';
 import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch';
 import RightMenu from './RightMenu';
+import { getWeather, fetchWeatherThunk} from './WeatherData/WeatherDataSlice'
 
 
 export default function AppContainer() {
   const theme = useMantineTheme();
-  const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
-  const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
+  const isMenuOpen:boolean = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
+  const isDesktop:boolean = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
+  const dispatch:AppDispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchWeatherThunk("Opole"));  
+  },[])
 
   return (
     <AppShell
