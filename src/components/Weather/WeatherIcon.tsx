@@ -1,5 +1,5 @@
 import React from "react";
-import {Image} from '@mantine/core';
+import {Image, LoadingOverlay} from '@mantine/core';
 
 import {weatherImageBaseUrl} from '../../api/WeatherAPI';
 
@@ -8,10 +8,11 @@ interface WeatherIcon{
 }
 
 const WeatherIcon = (props:WeatherIcon) =>{
-    console.log()
-    return(
-        <Image src={`${weatherImageBaseUrl}${props.iconId}@2x.png`}></Image>
-    )
+        return(
+            <div>
+            <Image src={`${weatherImageBaseUrl}${props.iconId}@2x.png`}></Image>
+            </div>
+        )
 }
 
 export default WeatherIcon;

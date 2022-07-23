@@ -1,4 +1,4 @@
-const apiKey: string = 'a9f383c9f1296b5377fe2a6da1078f41';
+const apiKey: string = 'e443ff5717f5a87ef95c3333d0945a2f';
 const baseUrl: string =`https://api.openweathermap.org/data/2.5/weather?units=metric&`;
 const weatherImageBaseUrl: string = "http://openweathermap.org/img/wn/";
 

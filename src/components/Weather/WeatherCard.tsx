@@ -1,11 +1,10 @@
-import React from "react";
-import { Card, Image, Text, Button, Group, Modal } from '@mantine/core';
+import React, {useEffect} from "react";
+import { Card, Image, Text, Button, Group, Modal, LoadingOverlay } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
 
 import WeatherIcon from './WeatherIcon';
-import {toggleModal} from '../Modal/ModalSlice'
-
+import {toggleModal} from '../Modal/ModalSlice';
 
 const WeatherCardStyle:React.CSSProperties = { 
   maxWidth:'400px',
@@ -18,11 +17,13 @@ const WeatherCardTextStyle:React.CSSProperties = {
 const WeatherCard = (props:any) =>{
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const isOpen = useSelector((state: RootState) => state.Modal.isOpen);
-  const dispatch = useDispatch();
-
+  const isWeatherDataFetched:boolean = useSelector((state: RootState) => state.WeatherData.isFetched);
+  
+  const dispatch = useDispatch();  
     return (
-      <div style={WeatherCardStyle}>
+      <div style={WeatherCardStyle}>        
         <Card shadow="sm" p="lg">
+        <LoadingOverlay visible={!isWeatherDataFetched} /> 
           <Card.Section>
             <Group position="left" spacing="xs">
               <WeatherIcon iconId={props.weatherData.weatherIconId} />
@@ -64,7 +65,7 @@ const WeatherCard = (props:any) =>{
           >
             Details
           </Button>
-        </Card>
+        </Card>        
       </div>
     );
 }

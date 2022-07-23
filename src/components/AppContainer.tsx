@@ -4,13 +4,13 @@ import {
   Navbar,
   Header,
   Footer,
-  Aside,
   Text,
-  MediaQuery,
-  Burger,
   useMantineTheme,
   Center,
-  Transition
+  Transition,
+  Group,
+  LoadingOverlay
+ 
 } from '@mantine/core';
 import { BrandGithub } from 'tabler-icons-react';
 import type { RootState, AppDispatch } from '../store/store';
@@ -18,18 +18,24 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch';
 import RightMenu from './RightMenu';
-import { getWeather, fetchWeatherThunk} from './WeatherData/WeatherDataSlice';
+import { setCities, fetchWeatherThunk} from './WeatherData/WeatherDataSlice';
 import WeatherCard from './Weather/WeatherCard';
+import UsersWeatherCards from './Weather/UsersWeatherCards';
 
 
 export default function AppContainer() {
   const theme = useMantineTheme();
-  const isMenuOpen:boolean = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
-  const isDesktop:boolean = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const dispatch:AppDispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchWeatherThunk("Opole"));  
+  const isMenuOpen:boolean = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
+  const isDesktop:boolean = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
+  const weatherData:Array<any> = useSelector((state: RootState) => state.WeatherData.cities);
+  const numberOfCitiesStored:number = useSelector((state: RootState) => state.WeatherData.numberOfCities);
+  const numberOfUserCites:number = 2;
+
+  useEffect(() => {  
+    console.log("done");
+    dispatch(fetchWeatherThunk(["Opole", "Gdańsk"]));   
   },[])
 
   return (
@@ -70,7 +76,12 @@ export default function AppContainer() {
       }
     >
    {/* MAIN AREA */}
-      <WeatherCard weatherData={useSelector((state: RootState) => state.WeatherData)}></WeatherCard>
+   
+   <Group>     
+      {/* {renderWeatherCards()} */}
+      {/* TODO: Convert it to use {child} */}
+      <UsersWeatherCards numberOfUserCites={numberOfUserCites} numberOfCitiesStored={numberOfCitiesStored} weatherData={weatherData} />
+    </Group>
    {/* MAIN AREA */}
     </AppShell>
   );
