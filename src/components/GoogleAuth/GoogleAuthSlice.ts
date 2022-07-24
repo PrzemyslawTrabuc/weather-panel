@@ -15,18 +15,22 @@ export interface GoogleAuth {
     name: 'GoogleAuth',
     initialState,
     reducers: {
-      signIn: (state: any, action: PayloadAction<GoogleAuth>) => {
+      signIn: (state:any, action: PayloadAction<GoogleAuth>) => {
         // Redux Toolkit allows us to write "mutating" logic in reducers. It
         // doesn't actually mutate the state because it uses the Immer library,
         // which detects changes to a "draft state" and produces a brand new
         // immutable state based off those changes
        state.userName = action.payload.userName;
        state.userId = action.payload.userId;
+      },
+      signOut:(state:any) =>{
+        state.userName = null
+        state.userId = null;
       }
     },
   })
   
   // Action creators are generated for each case reducer function
-  export const { signIn } = GoogleAuth.actions
+  export const { signIn, signOut } = GoogleAuth.actions
   
   export default GoogleAuth.reducer

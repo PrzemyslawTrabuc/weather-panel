@@ -97,10 +97,10 @@ export interface WeatherData {
   const initialState: WeatherData = {
       cities:[
         {
-          cityName: "template",                  
-          temp: -99999,
-          sunrise: 'mock',
-          sunset: 'mock',
+          cityName: "loading...",                  
+          temp: -0,
+          sunrise: 'loading...',
+          sunset: 'loading...',
           weatherIconId: '11d'
         }
       ],     
@@ -129,7 +129,7 @@ export interface WeatherData {
         let gatheredData: any = [];
         let counter = 0;
         for(const element of cities) {
-          const response = await fetch(`${baseUrl}q=${element}&appid=${apiKey}`);
+          const response = await fetch(`${baseUrl}weather?&units=metric&q=${element}&appid=${apiKey}`);
           const data = await response.json();
           gatheredData.push(data);
         }

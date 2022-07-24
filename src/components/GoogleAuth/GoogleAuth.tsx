@@ -4,6 +4,7 @@ import type { RootState } from "../../store/store";
 
 
 import { signIn } from "./GoogleAuthSlice";
+import getCookie from "../../tools/getCookie"
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
@@ -27,22 +28,12 @@ const GoogleAuth = () => {
     return JSON.parse(jsonPayload);
   }
 
-  const getCookie = (cookieName: string) => {
-    let cookie = {};
-    document.cookie.split(';').forEach(function(el) {
-      let [key,value] = el.split('=');
-      cookie[key.trim()] = value;
-    })
-    return cookie[cookieName];
-  }
-
   const handleCallbackResponse = (response: any) => {
     let data = parseJwt(response.credential);
     console.log("test");
     document.cookie = `userName=${data.name}`;  
     document.cookie = `userId=${data.sub}`;  
     dispatch(signIn({userName: data.name, userId: data.sub}));
-    //TODO: finish keeping in storage userData after refresh
   };
 
   useEffect(() => {
@@ -57,6 +48,7 @@ const GoogleAuth = () => {
         auto_select: true,
         callback: handleCallbackResponse,
     });
+    if(!getCookie("g_state"))
     google.accounts.id.prompt();
     window.google.accounts.id.renderButton(
       document.getElementById("googleSignIn") as HTMLElement,

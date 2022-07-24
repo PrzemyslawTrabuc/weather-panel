@@ -9,7 +9,6 @@ import {
   Center,
   Transition,
   Group,
-  LoadingOverlay
  
 } from '@mantine/core';
 import { BrandGithub } from 'tabler-icons-react';
@@ -18,9 +17,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import MobileMenuSwitch from './MobileMenu/MobileMenuSwitch';
 import RightMenu from './RightMenu';
-import { setCities, fetchWeatherThunk} from './WeatherData/WeatherDataSlice';
-import WeatherCard from './Weather/WeatherCard';
+import {fetchWeatherThunk} from './WeatherData/WeatherDataSlice';
 import UsersWeatherCards from './Weather/UsersWeatherCards';
+import LogoutButton from './LogoutButton';
 
 
 export default function AppContainer() {
@@ -51,8 +50,15 @@ export default function AppContainer() {
       navbar={
         <Transition mounted={isDesktop ? true : isMenuOpen} transition="fade" duration={400} timingFunction="ease">
           {(styles) =>
-          <Navbar style={styles} p="md" hiddenBreakpoint="sm" hidden={!isMenuOpen}width={{ sm: 200, lg: 300 }}>
-            <Text>Test</Text>
+          <Navbar style={styles} p="md" hiddenBreakpoint="sm" hidden={!isMenuOpen} width={{ sm: 200, lg: 300 }}>           
+            <Navbar.Section grow> 
+              <Text>Test</Text>            
+            </Navbar.Section>            
+            <Navbar.Section> 
+              <Center>
+                <LogoutButton />
+              </Center>              
+            </Navbar.Section>           
           </Navbar>
       }
         </Transition>  
