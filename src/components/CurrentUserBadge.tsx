@@ -5,7 +5,7 @@ import type { RootState } from "../store/store";
 import { current } from "@reduxjs/toolkit";
 
 const CurrentUserBadge = () => {
-  const currentUser = useSelector(
+  const currentUser: string | null = useSelector(
     (state: RootState) => state.GoogleAuth.userName
   );
   const isDesktop = useSelector(
@@ -24,7 +24,7 @@ const CurrentUserBadge = () => {
       color="blue"
       size="md"
       >
-        {currentUser.split(" ")[0].charAt(0) + currentUser.split(" ")[1].charAt(0)}
+        {currentUser ? currentUser.split(" ")[0].charAt(0) + currentUser.split(" ")[1].charAt(0) : ''}
         </Avatar>    
      </Tooltip> 
   );

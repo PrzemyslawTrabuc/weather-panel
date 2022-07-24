@@ -27,23 +27,40 @@ const GoogleAuth = () => {
     return JSON.parse(jsonPayload);
   }
 
+  const getCookie = (cookieName: string) => {
+    let cookie = {};
+    document.cookie.split(';').forEach(function(el) {
+      let [key,value] = el.split('=');
+      cookie[key.trim()] = value;
+    })
+    return cookie[cookieName];
+  }
+
   const handleCallbackResponse = (response: any) => {
     let data = parseJwt(response.credential);
-    console.log(data);
-    dispatch(signIn({ userName: data.name, userId: data.sub}));
+    console.log("test");
+    document.cookie = `userName=${data.name}`;  
+    document.cookie = `userId=${data.sub}`;  
+    dispatch(signIn({userName: data.name, userId: data.sub}));
+    //TODO: finish keeping in storage userData after refresh
   };
 
   useEffect(() => {
-    if(!userId){
+      // console.log(getCookie("userName"));
+      // console.log(getCookie("userId"));
+      dispatch(signIn({userName: getCookie("userName"), userId: getCookie("userId")}));
+    
+    if(!userId && !getCookie("userId")){
     window.google.accounts.id.initialize({
       client_id:
         "1030502307448-nmhaj2n273ahcd1ededol73i83arfotc.apps.googleusercontent.com",
         auto_select: true,
         callback: handleCallbackResponse,
     });
+    google.accounts.id.prompt();
     window.google.accounts.id.renderButton(
-      document.getElementById("googleSignIn"),
-      { theme: isDarkModeOn === true ? "filled_black" : "filled_blue" , size: "medium", type: isDesktop ? "" : "icon"}
+      document.getElementById("googleSignIn") as HTMLElement,
+      { theme: isDarkModeOn === true ? "filled_black" : "filled_blue" , size: "medium", type: isDesktop ? "standard" : "icon"}
     );
     }
   },[isDesktop, isDarkModeOn]);

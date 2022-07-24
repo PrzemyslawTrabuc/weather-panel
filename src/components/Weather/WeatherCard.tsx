@@ -53,6 +53,8 @@ const WeatherCard = (props:any) =>{
             opened={isOpen}
             onClose={() => dispatch(toggleModal())}
             title="Introduce yourself!"
+            overlayBlur={3}
+            overlayColor="none"
           >
             {/* Modal content */}
           </Modal>
