@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   AppShell,
   Navbar,
@@ -23,6 +23,7 @@ import LogoutButton from './LogoutButton';
 
 
 export default function AppContainer() {
+  const shouldEffect = useRef(true);
   const theme = useMantineTheme();
   const dispatch:AppDispatch = useDispatch();
 
@@ -32,9 +33,12 @@ export default function AppContainer() {
   const numberOfCitiesStored:number = useSelector((state: RootState) => state.WeatherData.numberOfCities);
   const numberOfUserCites:number = 2;
 
-  useEffect(() => {  
-    console.log("done");
-    dispatch(fetchWeatherThunk(["Opole", "Gdańsk"]));   
+  useEffect(() => {
+    if(shouldEffect.current){
+      console.log("done");
+      shouldEffect.current = false;
+      dispatch(fetchWeatherThunk(["Opole", "Gdańsk"]));   
+    }   
   },[])
 
   return (
