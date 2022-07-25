@@ -47,7 +47,7 @@ const UsersWeatherCards = (props:any) =>{
         if(props.isWeatherDataFetched === false)
           return(   
             <Center>
-              <Loader size="xl" style={{position: "absolute", left:0, right:0, marginLeft:"auto", marginRight:"auto", top:"30%"}}></Loader>
+              <Loader size="xl"></Loader>
             </Center>            
           )
 

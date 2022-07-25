@@ -8,7 +8,6 @@ import GoogleAuth from './GoogleAuth/GoogleAuth';
 import CurrentUserBadge from './CurrentUserBadge';
 
 const RightMenu = () =>{
-    console.log("right menu")
     const userId = useSelector((state: RootState) => state.GoogleAuth.userId);  
     const renderRightMenu = () =>{
         if(!userId)
