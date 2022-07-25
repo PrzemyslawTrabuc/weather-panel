@@ -22,7 +22,7 @@ import UsersWeatherCards from './Weather/UsersWeatherCards';
 import LogoutButton from './LogoutButton';
 
 
-export default function AppContainer() {
+export default function AppContainer(props:any) {
   const shouldEffect = useRef(true);
   const theme = useMantineTheme();
   const dispatch:AppDispatch = useDispatch();
@@ -33,13 +33,13 @@ export default function AppContainer() {
   const numberOfCitiesStored:number = useSelector((state: RootState) => state.WeatherData.numberOfCities);
   const numberOfUserCites:number = 2;
 
-  useEffect(() => {
-    if(shouldEffect.current){
-      console.log("done");
-      shouldEffect.current = false;
-      dispatch(fetchWeatherThunk(["Opole", "Gdańsk"]));   
-    }   
-  },[])
+  // useEffect(() => {
+  //   if(shouldEffect.current){
+  //     console.log("done");
+  //     shouldEffect.current = false;
+  //     dispatch(fetchWeatherThunk(["Opole", "Gdańsk"]));   
+  //   }   
+  // },[])
 
   return (
     <AppShell
@@ -87,10 +87,8 @@ export default function AppContainer() {
     >
    {/* MAIN AREA */}
    
-   <Group>     
-      {/* {renderWeatherCards()} */}
-      {/* TODO: Convert it to use {child} */}
-      <UsersWeatherCards numberOfUserCites={numberOfUserCites} numberOfCitiesStored={numberOfCitiesStored} weatherData={weatherData} />
+   <Group>    
+      {props.children}
     </Group>
    {/* MAIN AREA */}
     </AppShell>
