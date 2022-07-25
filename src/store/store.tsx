@@ -3,7 +3,9 @@ import DarkModeSwitchReducer from '../components/DarkModeSwitch/DarkModeSwitchSl
 import MobileMenuReducer from '../components/MobileMenu/MobileMenuSwitchSlice';
 import GoogleAuthReducer from '../components/GoogleAuth/GoogleAuthSlice';
 import WeatherDataReducer from '../components/WeatherData/WeatherDataSlice';
-import ModalReducer from '../components/Modal/ModalSlice'
+import ModalReducer from '../components/Modal/ModalSlice';
+import UserDataReducer from '../components/UserData/UserDataSlice';
+
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +13,8 @@ export const store = configureStore({
     MobileMenuSwitch: MobileMenuReducer,
     GoogleAuth: GoogleAuthReducer,
     WeatherData: WeatherDataReducer,
-    Modal: ModalReducer
+    Modal: ModalReducer,
+    UserData: UserDataReducer,
   },
 })
 

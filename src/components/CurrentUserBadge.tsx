@@ -5,7 +5,7 @@ import type { RootState } from "../store/store";
 import { current } from "@reduxjs/toolkit";
 
 const CurrentUserBadge = () => {
-  const currentUser: string | null = useSelector(
+  const currentUser = useSelector(
     (state: RootState) => state.GoogleAuth.userName
   );
   const isDesktop = useSelector(

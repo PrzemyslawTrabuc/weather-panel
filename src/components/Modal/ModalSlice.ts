@@ -6,7 +6,7 @@ export interface Modal {
   }
   
   const initialState: Modal = {
-    isOpen: false
+    isOpen: false,
   }
   
   export const Modal = createSlice({
@@ -19,11 +19,14 @@ export interface Modal {
         // which detects changes to a "draft state" and produces a brand new
         // immutable state based off those changes
         state.isOpen = !state.isOpen;
-      }
+      },
+        hideModal: (state:any)=>{
+          state.isOpen = false;
+        }
     },
   })
   
   // Action creators are generated for each case reducer function
-  export const { toggleModal } = Modal.actions
+  export const { toggleModal, hideModal } = Modal.actions
   
   export default Modal.reducer

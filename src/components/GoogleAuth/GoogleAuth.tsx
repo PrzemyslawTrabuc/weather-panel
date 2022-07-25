@@ -1,15 +1,20 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../store/store";
-
+import { doc, setDoc, getDoc } from "firebase/firestore"; 
+import db from "../../api/firebase";
 
 import { signIn } from "./GoogleAuthSlice";
-import getCookie from "../../tools/getCookie"
+import getCookie from "../../tools/getCookie";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
-  const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
-  const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
+  const isDarkModeOn = useSelector(
+    (state: RootState) => state.DarkModeSwitch.isDarkModeOn
+  );
+  const isDesktop = useSelector(
+    (state: RootState) => state.MobileMenuSwitch.isDesktop
+  );
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
 
   function parseJwt(token: string) {
@@ -28,34 +33,47 @@ const GoogleAuth = () => {
     return JSON.parse(jsonPayload);
   }
 
+  const createDocumentforGoogleUser = async(userId: string)=>{
+    const document = await getDoc(doc(db, "UsersData", userId))
+    if(!document.data())
+    await setDoc(doc(db, "UsersData", userId), {
+      favCities:[], 
+  })
+}
+
   const handleCallbackResponse = (response: any) => {
     let data = parseJwt(response.credential);
-    console.log("test");
-    document.cookie = `userName=${data.name}`;  
-    document.cookie = `userId=${data.sub}`;  
-    dispatch(signIn({userName: data.name, userId: data.sub}));
+    document.cookie = `userName=${data.name}`;
+    document.cookie = `userId=${data.sub}`;
+    createDocumentforGoogleUser(data.sub);
+    dispatch(signIn({ userName: data.name, userId: data.sub }));    
   };
 
   useEffect(() => {
-      // console.log(getCookie("userName"));
-      // console.log(getCookie("userId"));
-      dispatch(signIn({userName: getCookie("userName"), userId: getCookie("userId")}));
-    
-    if(!userId && !getCookie("userId")){
-    window.google.accounts.id.initialize({
-      client_id:
-        "1030502307448-nmhaj2n273ahcd1ededol73i83arfotc.apps.googleusercontent.com",
+    // console.log(getCookie("userName"));
+    // console.log(getCookie("userId"));
+    dispatch(
+      signIn({ userName: getCookie("userName"), userId: getCookie("userId") })
+    );
+
+    if (!userId && !getCookie("userId")) {
+      window.google.accounts.id.initialize({
+        client_id:
+          "1030502307448-nmhaj2n273ahcd1ededol73i83arfotc.apps.googleusercontent.com",
         auto_select: true,
         callback: handleCallbackResponse,
-    });
-    if(!getCookie("g_state"))
-    google.accounts.id.prompt();
-    window.google.accounts.id.renderButton(
-      document.getElementById("googleSignIn") as HTMLElement,
-      { theme: isDarkModeOn === true ? "filled_black" : "filled_blue" , size: "medium", type: isDesktop ? "standard" : "icon"}
-    );
+      });
+      if (!getCookie("g_state")) google.accounts.id.prompt();
+      window.google.accounts.id.renderButton(
+        document.getElementById("googleSignIn") as HTMLElement,
+        {
+          theme: isDarkModeOn === true ? "filled_black" : "filled_blue",
+          size: "medium",
+          type: isDesktop ? "standard" : "icon",
+        }
+      );
     }
-  },[isDesktop, isDarkModeOn]);
+  }, [isDesktop, isDarkModeOn]);
 
   return <div id="googleSignIn"></div>;
 };

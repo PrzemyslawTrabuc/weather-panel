@@ -104,7 +104,7 @@ const initialState: WeatherData = {
     },
   ],
   isFetched: false,
-  numberOfCities: 1,
+  numberOfCities: 0,
   fetchError: ":)",
 };
 
@@ -134,7 +134,6 @@ const fetchWeatherThunk = createAsyncThunk(
         `${baseUrl}weather?&units=metric&q=${element}&appid=${apiKey}`
       );
       const data = await response.json();
-      console.log(response);
       if (response.ok === true) {
         responseOkStatus = true;
         gatheredData.push(data);
@@ -156,14 +155,27 @@ export const WeatherData = createSlice({
     setCities: (state: any, action: PayloadAction<WeatherData>) => {
       state.cities = action.payload;
     },
+    clearWeatherData:(state:any)=>{
+      state.cities = [{
+        cityName: "loading...",
+        temp: -0,
+        sunrise: "loading...",
+        sunset: "loading...",
+        weatherIconId: "11d",
+      }];
+      state.numberOfCities = 0;
+      state.isFetched = false;
+    }
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchWeatherThunk.fulfilled, (state, action) => {
       let data: Test;
+      state.numberOfCities = 0;
+      let gatheredData:Array<Test> | WritableDraft = []
       let counter: number = 0;
       if (action.payload && action.payload.responseOkStatus) {
-        while (counter < 2) {
+        while (action.payload.gatheredData[counter]) {
           if (action.payload.gatheredData[counter]) {
             data = {
               cityName: action.payload.gatheredData[counter].name,
@@ -177,11 +189,12 @@ export const WeatherData = createSlice({
               weatherIconId:
                 action.payload.gatheredData[counter].weather[0].icon,
             };
-            state.cities.push(data);
-            state.numberOfCities += 1;
+            gatheredData.push(data);
+            state.numberOfCities++;
           }
           counter++;
         }
+        state.cities = gatheredData;
         state.isFetched = true;
       }
       if (action.payload && action.payload.responseOkStatus === false)
@@ -197,7 +210,7 @@ export const WeatherData = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setCities } = WeatherData.actions;
+export const { setCities, clearWeatherData } = WeatherData.actions;
 export { fetchWeatherThunk };
 
 export default WeatherData.reducer;

@@ -1,21 +1,35 @@
 import React from 'react';
 import WeatherCard from './WeatherCard';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from '../../store/store';
+import {Loader, Center} from "@mantine/core";
+import { selectCity } from '../CitySelectedByUser/CitySelectedByUserSlice';
 
 const UsersWeatherCards = (props:any) =>{
-
+  const dispatch = useDispatch();
+  const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
+  
     const buildWeatherCardsList = (numberOfCitiesStored:number) =>{
-        let counter:number = 1;
-        if(numberOfCitiesStored == 3){
+        let counter:number = 0;
+        if(props.isWeatherDataFetched){
           const items:any[] = [];
           while(counter < numberOfCitiesStored){      
-            items.push(<WeatherCard key={counter} weatherData={props.weatherData[counter]}></WeatherCard>)
+            items.push(
+              <WeatherCard 
+                key={counter}
+                cityNumber={counter} 
+                weatherData={props.weatherData[counter]} 
+                // onDetailsClick={dispatch(selectCity({cityNumber: counter, cityName: props.weatherData[counter].cityName }))}
+              >
+              </WeatherCard>
+            )
             counter++;     
           }
           return items;
         }
-        if(numberOfCitiesStored != 3){
+        if(props.isWeatherDataFetched === false){
           const items:any[] = [];
-          while(counter <= props.numberOfUserCites){      
+          while(counter <= numberOfFavUsersCities){      
             items.push(<WeatherCard key={counter} weatherData={props.weatherData[0]}></WeatherCard>)
             counter++;     
           }
@@ -24,20 +38,19 @@ const UsersWeatherCards = (props:any) =>{
       }
 
     const renderWeatherCards = () =>{
-        if(props.numberOfCitiesStored !== props.numberOfUserCites){
+        if(props.isWeatherDataFetched)
           return(
             <>
-               {buildWeatherCardsList(props.numberOfCitiesStored)}
+              {buildWeatherCardsList(props.numberOfCitiesStored)}             
             </>
           ) 
-        }
-    
-        if(props.weatherData.length == 3)
-        return(
-          <>
-            {buildWeatherCardsList(props.numberOfCitiesStored)}
-          </>
-        ) 
+        if(props.isWeatherDataFetched === false)
+          return(   
+            <Center>
+              <Loader size="xl" style={{position: "absolute", left:0, right:0, marginLeft:"auto", marginRight:"auto", top:"30%"}}></Loader>
+            </Center>            
+          )
+
       }
 
       return(
