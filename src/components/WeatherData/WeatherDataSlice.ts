@@ -71,6 +71,11 @@ import { apiKey, baseUrl } from "../../api/WeatherAPI";
 
 import convertUnixTime from "../../tools/convertUnixTime";
 
+export interface SwapCities{
+  cityIndexInArrayToChange: number,
+  cityDataToUseAsTemp: Test
+}
+
 export interface Test {
   cityName: string;
   temp: number;
@@ -78,6 +83,7 @@ export interface Test {
   sunset: string;
   weatherIconId: string;
 }
+
 export interface WeatherData {
   cities: [
     {
@@ -125,7 +131,6 @@ const initialState: WeatherData = {
 const fetchWeatherThunk = createAsyncThunk(
   "weather/getWeather",
   async (cities: Array<string>, thunkAPI) => {
-    console.log(cities);
     let gatheredData: any = [];
     let responseOkStatus: boolean = false;
     let responseToReturn: any = null;
@@ -165,6 +170,20 @@ export const WeatherData = createSlice({
       }];
       state.numberOfCities = 0;
       state.isFetched = false;
+    },
+    moveItemLeftInArray(state: any, action: PayloadAction<SwapCities>){
+      console.log(action.payload)
+      if(state.cities[action.payload.cityIndexInArrayToChange-1]){
+      state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange-1]
+      state.cities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp
+      }
+    },
+    moveItemRightInArray(state: any, action: PayloadAction<SwapCities>){
+      console.log(action.payload)
+      if(state.cities[action.payload.cityIndexInArrayToChange+1]){
+      state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange+1]
+      state.cities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp
+      }
     }
   },
   extraReducers: (builder) => {
@@ -210,7 +229,7 @@ export const WeatherData = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setCities, clearWeatherData } = WeatherData.actions;
+export const { setCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray } = WeatherData.actions;
 export { fetchWeatherThunk };
 
 export default WeatherData.reducer;

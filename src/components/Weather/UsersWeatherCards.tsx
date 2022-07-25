@@ -3,7 +3,6 @@ import WeatherCard from './WeatherCard';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
 import {Loader, Center} from "@mantine/core";
-import { selectCity } from '../CitySelectedByUser/CitySelectedByUserSlice';
 
 const UsersWeatherCards = (props:any) =>{
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ const UsersWeatherCards = (props:any) =>{
         if(props.isWeatherDataFetched === false){
           const items:any[] = [];
           while(counter <= numberOfFavUsersCities){      
-            items.push(<WeatherCard key={counter} weatherData={props.weatherData[0]}></WeatherCard>)
+            items.push(<WeatherCard key={counter} weatherData={props.weatherData[0]} cityNumber={counter}></WeatherCard>)
             counter++;     
           }
           return items;

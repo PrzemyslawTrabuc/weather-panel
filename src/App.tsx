@@ -9,10 +9,13 @@ import {fetchWeatherThunk} from './components/WeatherData/WeatherDataSlice';
 import {setNumberOfFavUsersCities} from './components/UserData/UserDataSlice'
 import {doc, getDoc } from "firebase/firestore";
 import db from "./api/firebase";
+import {setUserFavCities} from "./components/UserData/UserDataSlice"
+
 
 const App =()=> {
   const dispatch:AppDispatch = useDispatch();
   const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
+ 
 
   const getUsersFavCities = async(userId:string) =>{
     const docRef = doc(db, "UsersData", userId);
