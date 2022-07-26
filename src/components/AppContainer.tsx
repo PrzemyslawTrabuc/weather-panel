@@ -43,14 +43,14 @@ export default function AppContainer(props: any) {
   };
 
   useEffect(() => {
-    if(userId && shouldEffect.current && location.pathname === "/"){
+    if(userId && location.pathname === "/"){
       props.saveNumberOfFavUsersCitieInStore(userId);     
   }
   },[userId])
 
   useEffect(() => {
     if (userId && location.pathname === "/mycities") {
-      //favRefreshInterval = window.setInterval(refreshWeatherData, 10000);
+      //favRefreshInterval = window.setInterval(refreshWeatherData, 3000);
     }
     return () => {
       clearInterval(favRefreshInterval);
@@ -64,7 +64,8 @@ export default function AppContainer(props: any) {
   }, [userId, location.pathname]);
 
   useEffect(() => {
-    if (location.pathname !== "/mycities") clearInterval(favRefreshInterval);
+    if (location.pathname !== "/mycities") 
+      clearInterval(favRefreshInterval);
   }, [location.pathname]);
 
   const refreshWeatherData = () => {

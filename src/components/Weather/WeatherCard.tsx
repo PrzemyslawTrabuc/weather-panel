@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { Card, Image, Text, Button, Group, Modal, LoadingOverlay, Transition } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
@@ -19,24 +19,29 @@ const WeatherCardTextStyle:React.CSSProperties = {
 }
 
 const WeatherCard = (props:any) =>{
+  const test = useRef(true);
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
   const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
-  const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
-  const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
+  const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen); 
+
+  useEffect(() => {
+    test.current = false 
+   },[]);
+
   const dispatch = useDispatch(); 
-  const [test, setTest] = useState(true);
+  const [animate, setAnimate] = useState(true);
  
   const handleMoveCardLeft = () =>{
-    setTest(false); 
-    setTimeout(()=>setTest(true),300)
+    setAnimate(false); 
+    setTimeout(()=>setAnimate(true),300)
     setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300)
   }
 
   const handleMoveCardRight = () =>{
-    setTest(false); 
-    setTimeout(()=>setTest(true),300)
+    setAnimate(false); 
+    setTimeout(()=>setAnimate(true),300)
     setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300)
   }
 
@@ -53,8 +58,9 @@ const WeatherCard = (props:any) =>{
   }
 
   const renderCard = () =>{
+    console.log("weatherCard")
     return(
-         <Transition mounted={test} transition="fade" duration={300} timingFunction="ease">{
+         <Transition mounted={animate} transition="fade" duration={300} timingFunction="ease">{
       (styles) =>   
       <div style={styles}>        
         <Card shadow="sm" p="lg">
@@ -123,8 +129,6 @@ const WeatherCard = (props:any) =>{
     if(userId)
     pushFavListOrderToFirebase(userId)
   },[weatherData])
-
-    console.log("weatherCard")
 
     return (
       <>

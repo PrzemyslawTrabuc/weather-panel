@@ -81,7 +81,7 @@ const UsersWeatherCards = (props:any) =>{
               title={`Details About: ${weatherData[numberOfselectedCity].cityName}`}
               overlayOpacity={0.1}
               overlayBlur={3}
-      >
+            >
               {weatherData[numberOfselectedCity].cityName}
             </Modal>
         </>

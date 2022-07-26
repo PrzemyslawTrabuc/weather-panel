@@ -86,13 +86,7 @@ export interface Test {
 
 export interface WeatherData {
   cities: [
-    {
-      cityName: string;
-      temp: number;
-      sunrise: string;
-      sunset: string;
-      weatherIconId: string;
-    }
+   Test
   ];
   isFetched: boolean;
   numberOfCities: number;
@@ -114,20 +108,6 @@ const initialState: WeatherData = {
   fetchError: ":)",
 };
 
-// const fetchWeatherThunk = createAsyncThunk(
-//   'weather/getWeather',
-//     async (cities:[], thunkAPI) => {
-//     console.log(cities);
-//     let gatheredData:any = [];
-//     let data = {};
-//     await cities.forEach(async(city)=>{
-//       const response = await fetch(`${baseUrl}q=${city}&appid=${apiKey}`);
-//       data = await response.json();
-//       gatheredData.push(data);
-//       console.log(gatheredData)
-//     });
-//   }
-// )
 const fetchWeatherThunk = createAsyncThunk(
   "weather/getWeather",
   async (cities: Array<string>, thunkAPI) => {
@@ -149,6 +129,7 @@ const fetchWeatherThunk = createAsyncThunk(
     if (responseOkStatus === false) {
       return { responseToReturn, responseOkStatus };
     }
+    console.log(gatheredData);
     if (responseOkStatus === true) return { gatheredData, responseOkStatus };
   }
 );
@@ -172,7 +153,6 @@ export const WeatherData = createSlice({
       state.isFetched = false;
     },
     moveItemLeftInArray(state: any, action: PayloadAction<SwapCities>){
-      console.log(action.payload)
       if(state.cities[action.payload.cityIndexInArrayToChange-1]){
       state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange-1]
       state.cities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp
@@ -191,7 +171,16 @@ export const WeatherData = createSlice({
     builder.addCase(fetchWeatherThunk.fulfilled, (state, action) => {
       let data: Test;
       state.numberOfCities = 0;
-      let gatheredData:Array<Test> | WritableDraft = []
+      let gatheredData:[Test] = 
+      [
+        {
+          cityName: "loading...",
+          temp: -0,
+          sunrise: "loading...",
+          sunset: "loading...",
+          weatherIconId: "11d"
+        }
+      ];
       let counter: number = 0;
       if (action.payload && action.payload.responseOkStatus) {
         while (action.payload.gatheredData[counter]) {
@@ -203,16 +192,20 @@ export const WeatherData = createSlice({
                 action.payload.gatheredData[counter].sys.sunrise
               ),
               sunset: convertUnixTime(
-                action.payload.gatheredData[0].sys.sunset
+                action.payload.gatheredData[counter].sys.sunset
               ),
               weatherIconId:
                 action.payload.gatheredData[counter].weather[0].icon,
             };
+            if(counter === 0)
+            gatheredData[0] = (data);
+            if(counter !== 0)
             gatheredData.push(data);
             state.numberOfCities++;
           }
           counter++;
         }
+        console.log(gatheredData)
         state.cities = gatheredData;
         state.isFetched = true;
       }
