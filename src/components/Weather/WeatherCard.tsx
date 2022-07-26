@@ -18,45 +18,52 @@ const WeatherCardTextStyle:React.CSSProperties = {
   fontSize:"1.5rem"
 }
 
+
 const WeatherCard = (props:any) =>{
-  const test = useRef(true);
+  const test = useRef(false);
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
   const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
-  const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen); 
-
-  useEffect(() => {
-    test.current = false 
-   },[]);
-
   const dispatch = useDispatch(); 
-  const [animate, setAnimate] = useState(true);
- 
-  const handleMoveCardLeft = () =>{
-    setAnimate(false); 
-    setTimeout(()=>setAnimate(true),300)
-    setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300)
-  }
 
-  const handleMoveCardRight = () =>{
-    setAnimate(false); 
-    setTimeout(()=>setAnimate(true),300)
-    setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300)
-  }
+  const [animate, setAnimate] = useState(true);
 
   const pushFavListOrderToFirebase = async(userId: string)=>{
     let dataToInsert:Array<string> = []
-    const document = await getDoc(doc(db, "UsersData", userId))
+    const document:any = await getDoc(doc(db, "UsersData", userId))
+    let currentData: Array<string> = [];       
     weatherData.forEach((element)=>{
       dataToInsert.push(element.cityName);
     })
-    await setDoc(doc(db, "UsersData", userId),{
-      favCities: dataToInsert
+    if(test.current){
+      await setDoc(doc(db, "UsersData", userId),{
+        favCities: dataToInsert
+      })  
     }
-    )       
+  }  
+ 
+  const handleMoveCardLeft = () =>{  
+    setAnimate(false); 
+    setTimeout(()=>setAnimate(true),300)
+    setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);    
+    test.current = true 
   }
 
+  const handleMoveCardRight = () =>{    
+    setAnimate(false); 
+    setTimeout(()=>setAnimate(true),300)
+    setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
+    test.current = true 
+  }
+
+  useEffect(()=>{
+    if(userId && test.current === true){
+      pushFavListOrderToFirebase(userId);
+    }
+  },[weatherData])
+
+  console.log(userId)
   const renderCard = () =>{
     console.log("weatherCard")
     return(
@@ -123,12 +130,6 @@ const WeatherCard = (props:any) =>{
       </Transition>
     )
   }
-
-
-  useEffect(() =>{
-    if(userId)
-    pushFavListOrderToFirebase(userId)
-  },[weatherData])
 
     return (
       <>

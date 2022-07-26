@@ -61,7 +61,7 @@ export default function AppContainer(props: any) {
     if (userId && location.pathname === "/mycities") {
       props.getFavCitiesWeatherByUserId(userId);
     }
-  }, [userId, location.pathname]);
+  }, [location.pathname, userId]);
 
   useEffect(() => {
     if (location.pathname !== "/mycities") 
@@ -81,7 +81,6 @@ export default function AppContainer(props: any) {
         location.pathname === "/mycities"
       ) {
         shouldEffect.current = false;
-        //props.getFavCitiesWeatherByUserId(userId);
       }
       return (
         <UsersWeatherCards
