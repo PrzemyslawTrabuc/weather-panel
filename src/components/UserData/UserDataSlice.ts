@@ -24,7 +24,7 @@ export interface UserData {
         // immutable state based off those changes
        state.numberOfFavUsersCities = action.payload;
       },
-      selectCityFromUsersList: (state:any, action:PayloadAction<UserData>) => {
+      selectCityFromUsersList: (state:any, action:PayloadAction<number>) => {
         state.citySelectedByUserOnHisList = action.payload;
       },
       setUserFavCities:(state:any, action: PayloadAction<UserData>) =>{

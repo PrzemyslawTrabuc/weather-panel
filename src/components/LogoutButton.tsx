@@ -10,7 +10,6 @@ import {clearUserData} from "./UserData//UserDataSlice";
 const LogoutButton = () =>{
     const dispatch:AppDispatch = useDispatch();
     const userId = useSelector((state:RootState) => state.GoogleAuth.userId)
-
     const handleLogout = () =>{
         dispatch(signOut());
         dispatch(toggleMobileMenu());

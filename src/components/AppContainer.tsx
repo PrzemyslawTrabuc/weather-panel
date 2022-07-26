@@ -10,7 +10,6 @@ import {
   Transition,
   Group,
   NavLink,
-  Modal,
 } from "@mantine/core";
 
 import { BrandGithub } from "tabler-icons-react";
@@ -24,8 +23,6 @@ import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
 import UsersWeatherCards from "./Weather/UsersWeatherCards";
 import { clearWeatherData } from "./WeatherData/WeatherDataSlice";
-import { hideModal } from "../components/Modal/ModalSlice";
-
 export default function AppContainer(props: any) {
   const shouldEffect = useRef(true);
   const theme = useMantineTheme();
@@ -37,18 +34,23 @@ export default function AppContainer(props: any) {
   const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
   const numberOfCitiesStored = useSelector((state: RootState) => state.WeatherData.numberOfCities);
-  const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
-  const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
-  
-    let favRefreshInterval: number = 0;
+  const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
+
+  let favRefreshInterval: number = 0;
 
   const handleMobileMenu = () => {
     if (!isDesktop) dispatch(toggleMobileMenu());
   };
 
   useEffect(() => {
+    if(userId && shouldEffect.current && location.pathname === "/"){
+      props.saveNumberOfFavUsersCitieInStore(userId);     
+  }
+  },[userId])
+
+  useEffect(() => {
     if (userId && location.pathname === "/mycities") {
-      //favRefreshInterval = window.setInterval(refreshWeatherData, 5000);
+      //favRefreshInterval = window.setInterval(refreshWeatherData, 10000);
     }
     return () => {
       clearInterval(favRefreshInterval);
@@ -132,7 +134,7 @@ export default function AppContainer(props: any) {
                   <Link to="/mycities" style={{ textDecoration: "none" }}>
                     <NavLink
                       icon={<i className="fa-solid fa-heart"></i>}
-                      description="Weather for your cities"
+                      description={`Weather for your cities (${numberOfFavUsersCities})`}
                       label="My Cities"
                       active={location.pathname === "/mycities" ? true : false}
                       onClick={handleMobileMenu}
@@ -193,16 +195,6 @@ export default function AppContainer(props: any) {
         />
         <Route path="/" element={<div>Hello Weather Panel</div>} />
       </Routes>
-
-      <Modal
-        opened={isOpenModal}
-        onClose={() => dispatch(hideModal())}
-        title="Weaher Details"
-        overlayOpacity={0.1}
-        overlayBlur={3}
-      >
-        {weatherData[numberOfselectedCity].cityName}
-      </Modal>
     </AppShell>
   );
 }
