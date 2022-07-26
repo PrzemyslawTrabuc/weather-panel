@@ -154,15 +154,15 @@ export const WeatherData = createSlice({
     },
     moveItemLeftInArray(state: any, action: PayloadAction<SwapCities>){
       if(state.cities[action.payload.cityIndexInArrayToChange-1]){
-      state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange-1]
-      state.cities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp
+        state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange-1]
+        state.cities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp
       }
     },
     moveItemRightInArray(state: any, action: PayloadAction<SwapCities>){
       console.log(action.payload)
       if(state.cities[action.payload.cityIndexInArrayToChange+1]){
-      state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange+1]
-      state.cities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp
+        state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange+1]
+        state.cities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp
       }
     }
   },
