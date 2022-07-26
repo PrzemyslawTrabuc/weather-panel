@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo, useEffect} from 'react';
 import WeatherCard from './WeatherCard';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
@@ -12,11 +12,19 @@ const UsersWeatherCards = (props:any) =>{
   const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
   const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
   const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
+  const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
 
   const handleDetailsClick = (cityNumber:number) =>{
     dispatch(selectCityFromUsersList(cityNumber))
     dispatch(toggleModal());
   }
+
+  const handleCloseModal = () =>{
+    dispatch(hideModal())
+  }
+
+  useEffect(() => {
+  },[weatherData])
   
     const buildWeatherCardsList = (numberOfCitiesStored:number) =>{
         let counter:number = 0;
@@ -47,21 +55,21 @@ const UsersWeatherCards = (props:any) =>{
       }
 
     const renderWeatherCards = () =>{
+      console.log(userFavCities.length)
       console.log("userWeatherCards")
-        if(props.isWeatherDataFetched)
+        if(props.isWeatherDataFetched && numberOfFavUsersCities > 0)
           return(
             <>
               {buildWeatherCardsList(props.numberOfCitiesStored)}             
             </>
           ) 
-        if(props.isWeatherDataFetched === false){
-          if(numberOfFavUsersCities > 0)
+        if(props.isWeatherDataFetched === false && userFavCities.length !== 0)
           return(   
             <Center>
               <Loader size="xl"></Loader>
             </Center>            
           )
-          if(numberOfFavUsersCities === 0){
+          if(props.isWeatherDataFetched === false && userFavCities.length === 0){
             return(   
               <Center>
                 <Text>
@@ -70,14 +78,18 @@ const UsersWeatherCards = (props:any) =>{
               </Center>            
             )
           }
-        }
-    }
+      }
+
+      const MemoizedCards = useMemo(()=>{
+          return renderWeatherCards()
+      },[weatherData, numberOfFavUsersCities])
+
       return(
         <>
-            {renderWeatherCards()}
+            {MemoizedCards}
             <Modal
               opened={isOpenModal}
-              onClose={() => dispatch(hideModal())}
+              onClose={handleCloseModal}
               title={`Details About: ${weatherData[numberOfselectedCity].cityName}`}
               overlayOpacity={0.1}
               overlayBlur={3}

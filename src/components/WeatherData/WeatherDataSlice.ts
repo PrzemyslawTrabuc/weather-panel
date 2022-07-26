@@ -210,8 +210,8 @@ export const WeatherData = createSlice({
         state.isFetched = true;
       }
       if (action.payload && action.payload.responseOkStatus === false && action.payload.responseOkStatus)
-        state.fetchError = action.payload.responseToReturn.message;
-      else state.fetchError = "Add some cities or check internet connection";
+        state.fetchError = action.payload.responseToReturn.message;   
+        state.cities=gatheredData;
     });
     builder.addCase(fetchWeatherThunk.pending, (state, action) => {
       state.isFetched = false;

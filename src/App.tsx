@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css';
 import AppContainer from './components/AppContainer';
@@ -6,7 +6,7 @@ import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core
 import type { RootState, AppDispatch } from './store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchWeatherThunk} from './components/WeatherData/WeatherDataSlice';
-import {setNumberOfFavUsersCities} from './components/UserData/UserDataSlice'
+import {setNumberOfFavUsersCities, setUserFavCities} from './components/UserData/UserDataSlice'
 import {doc, getDoc } from "firebase/firestore";
 import db from "./api/firebase";
 import {initializeDarkModefromCookie} from "./components/DarkModeSwitch/DarkModeSwitchSlice";
@@ -47,6 +47,7 @@ const App =()=> {
   const saveNumberOfFavUsersCitieInStore = async(userId: string)=>{
     let citiesArray = await getUsersFavCities(userId);
     dispatch(setNumberOfFavUsersCities(citiesArray.length))
+    dispatch(setUserFavCities(citiesArray))
     return citiesArray
   }
 
