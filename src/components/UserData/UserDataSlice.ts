@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { SwapCities } from '../WeatherData/WeatherDataSlice'
 
 export interface UserData {
     numberOfFavUsersCities: number,
@@ -34,11 +35,27 @@ export interface UserData {
         state.numberOfFavUsersCities = 0;
         state.citySelectedByUserOnHisList = 0;
         state.userFavCities = "add some cities"
-      }
+      },
+      deleteUserFavCity:(state:any, action:PayloadAction<number>)=>{
+        state.userFavCities.splice(action.payload,1);
+      },
+      moveFavCityLeftInArray(state: any, action: PayloadAction<SwapCities>){
+        if(state.userFavCities[action.payload.cityIndexInArrayToChange-1]){
+          state.userFavCities[action.payload.cityIndexInArrayToChange] = state.userFavCities[action.payload.cityIndexInArrayToChange-1]
+          state.userFavCities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp.cityName
+        }
+      },
+      moveFavCityRightInArray(state: any, action: PayloadAction<SwapCities>){
+        console.log(action.payload)
+        if(state.userFavCities[action.payload.cityIndexInArrayToChange+1]){
+          state.userFavCities[action.payload.cityIndexInArrayToChange] = state.userFavCities[action.payload.cityIndexInArrayToChange+1]
+          state.userFavCities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp.cityName
+        }
+      },
     },
   })
   
   // Action creators are generated for each case reducer function
-  export const { setNumberOfFavUsersCities, selectCityFromUsersList, clearUserData, setUserFavCities} = UserData.actions
+  export const { setNumberOfFavUsersCities, selectCityFromUsersList, clearUserData, setUserFavCities, deleteUserFavCity, moveFavCityLeftInArray, moveFavCityRightInArray} = UserData.actions
   
   export default UserData.reducer

@@ -24,7 +24,8 @@ import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
 import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
 import UsersWeatherCards from "./Weather/UsersWeatherCards";
-import { clearWeatherData, WeatherDetailsForCity, addNewCityToWeatherData } from "./WeatherData/WeatherDataSlice";
+import { clearWeatherData, WeatherDetailsForCity, addNewCityToWeatherData, fetchSingleWeatherThunk } from "./WeatherData/WeatherDataSlice";
+import { setNumberOfFavUsersCities } from "./UserData/UserDataSlice";
 
 
 export default function AppContainer(props: any) {
@@ -36,6 +37,7 @@ export default function AppContainer(props: any) {
   const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
+  const currentCityWeather = useSelector((state: RootState) => state.WeatherData.currentCityWeather);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
   const numberOfCitiesStored = useSelector((state: RootState) => state.WeatherData.numberOfCities);
   const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
@@ -44,15 +46,15 @@ export default function AppContainer(props: any) {
 
   const addFavCityToFirebase = async(userId: string, cityName:string)=>{    
     let dataToInsert:Array<string> = []
-    weatherData.forEach((element)=>{
-      if(element.temp != -0)
+    weatherData.forEach((element:any)=>{
+      if(element.temp !== 99999)
       dataToInsert.push(element.cityName);
     })
     dataToInsert.push(cityName);
       await setDoc(doc(db, "UsersData", userId),{
         favCities: dataToInsert
       })  
-      //TODO: add fetching only one weather city add push it into weather data
+      dispatch(addNewCityToWeatherData(currentCityWeather))
   }
 
   const handleMobileMenu = () => {
@@ -212,7 +214,8 @@ export default function AppContainer(props: any) {
         />
         <Route path="/" element={<div>Hello Weather Panel</div>} />
       </Routes>
-      <button onClick={() => addFavCityToFirebase(userId, "Marsylia")}>DUPA</button>
+      <button onClick={() => addFavCityToFirebase(userId, "Opole")}>DUPA</button>
+      <button onClick={() => dispatch(fetchSingleWeatherThunk("Opole"))}>DUPA2</button>
     </AppShell>
   );
 }

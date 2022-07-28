@@ -5,6 +5,8 @@ import type { RootState } from '../../store/store';
 
 import WeatherIcon from './WeatherIcon';
 import {moveItemLeftInArray, moveItemRightInArray, deleteCityFromCities} from "../WeatherData/WeatherDataSlice";
+import {moveFavCityLeftInArray, moveFavCityRightInArray} from "../UserData/UserDataSlice"
+import {deleteUserFavCity, setNumberOfFavUsersCities} from "../UserData/UserDataSlice";
 
 const WeatherCardStyle:React.CSSProperties = { 
   maxWidth:'400px',
@@ -18,15 +20,21 @@ const WeatherCardTextStyle:React.CSSProperties = {
 const WeatherCard = (props:any) =>{
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
+  const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
   const dispatch = useDispatch(); 
 
   const [animate, setAnimate] = useState(true);
 
+  const deleteFavCityFromStore = (cityId:number) =>{
+    dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities-1));
+    dispatch(deleteUserFavCity(cityId));
+  }
 
   const deleteFavCityFromFirebase = (cityId : number)=>{
     setAnimate(false); 
     setTimeout(()=>setAnimate(true),300);
     setTimeout(()=> dispatch(deleteCityFromCities(cityId)),300); 
+    setTimeout(()=>deleteFavCityFromStore(cityId),300)
     props.toggleTest();
   }
  
@@ -34,6 +42,7 @@ const WeatherCard = (props:any) =>{
     setAnimate(false); 
     setTimeout(()=>setAnimate(true),300);
     setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
+    setTimeout(()=>dispatch(moveFavCityLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
     props.toggleTest(); 
   }
 
@@ -41,6 +50,7 @@ const WeatherCard = (props:any) =>{
     setAnimate(false); 
     setTimeout(()=>setAnimate(true),300)
     setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300); 
+    setTimeout(()=>dispatch(moveFavCityRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
     props.toggleTest();
   }
 

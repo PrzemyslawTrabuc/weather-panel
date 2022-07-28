@@ -7,7 +7,7 @@ import {toggleModal, hideModal} from '../Modal/ModalSlice';
 import {selectCityFromUsersList} from "../UserData/UserDataSlice";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import db from "../../api/firebase";
-import {fetchWeatherThunk} from '../WeatherData/WeatherDataSlice';
+import {fetchWeatherThunk, clearWeatherData} from '../WeatherData/WeatherDataSlice';
 import { setNumberOfFavUsersCities} from "../UserData/UserDataSlice"
 
 
@@ -44,7 +44,7 @@ const UsersWeatherCards = (props:any) =>{
       await setDoc(doc(db, "UsersData", userId),{
         favCities: dataToInsert
       }) 
-      console.log(dataToInsert)
+      console.log(dataToInsert);
   }
 
   useEffect(()=>{
@@ -58,7 +58,6 @@ const UsersWeatherCards = (props:any) =>{
 
 
   useEffect(()=>{
-    console.log("DUPA DUPA")
     if(userId && userFavCities && test2.current===false)
       dispatch(fetchWeatherThunk(userFavCities));
       test2.current = true;

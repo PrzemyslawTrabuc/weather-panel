@@ -90,13 +90,14 @@ export interface WeatherData {
   isFetched: boolean;
   numberOfCities: number;
   fetchError: string;
+  currentCityWeather: WeatherDetailsForCity
 }
 
 const initialState: WeatherData = {
   cities: [
     {
       cityName: "loading...",
-      temp: -0,
+      temp: 99999,
       sunrise: "loading...",
       sunset: "loading...",
       weatherIconId: "11d",
@@ -105,6 +106,13 @@ const initialState: WeatherData = {
   isFetched: false,
   numberOfCities: 0,
   fetchError: ":)",
+  currentCityWeather: {
+      cityName: "loading...",
+      temp: 99999,
+      sunrise: "loading...",
+      sunset: "loading...",
+      weatherIconId: "11d",
+  }
 };
 
 const fetchWeatherThunk = createAsyncThunk(
@@ -133,6 +141,30 @@ const fetchWeatherThunk = createAsyncThunk(
   }
 );
 
+const fetchSingleWeatherThunk = createAsyncThunk(
+  "weather/getSingleWeather",
+  async (cityName: string) => {
+    console.log("dupa2")
+    let cityData: any = [];
+    let responseOkStatus: boolean = false;
+    let responseToReturn: any = null;
+      const response = await fetch(
+        `${baseUrl}weather?&units=metric&q=${cityName}&appid=${apiKey}`
+      );
+      const data = await response.json();
+      if (response.ok === true) {
+        responseOkStatus = true;
+        cityData.push(data);
+      } else {
+        responseToReturn = data;
+      }
+    if (responseOkStatus === false) {
+      return { responseToReturn, responseOkStatus };
+    }
+    if (responseOkStatus === true) return { cityData, responseOkStatus };
+  }
+);
+
 export const WeatherData = createSlice({
   name: "WeatherData",
   initialState,
@@ -144,7 +176,7 @@ export const WeatherData = createSlice({
     clearWeatherData:(state:any)=>{
       state.cities = [{
         cityName: "loading...",
-        temp: -0,
+        temp: 99999,
         sunrise: "loading...",
         sunset: "loading...",
         weatherIconId: "11d",
@@ -178,7 +210,7 @@ export const WeatherData = createSlice({
       [
         {
           cityName: "loading...",
-          temp: -0,
+          temp: 99999,
           sunrise: "loading...",
           sunset: "loading...",
           weatherIconId: "11d"
@@ -201,10 +233,10 @@ export const WeatherData = createSlice({
                 action.payload.gatheredData[counter].weather[0].icon,
             };
             if(counter === 0)
-            gatheredData[0] = (data);
+              gatheredData[0] = (data);
             if(counter !== 0)
-            gatheredData.push(data);
-            state.numberOfCities++;
+              gatheredData.push(data);
+              state.numberOfCities++;
           }
           counter++;
         }
@@ -222,11 +254,33 @@ export const WeatherData = createSlice({
     builder.addCase(fetchWeatherThunk.rejected, (state, action) => {
       state.isFetched = false;
     });
+    builder.addCase(fetchSingleWeatherThunk.fulfilled, (state, action) => {
+      let dataToStore: WeatherDetailsForCity;
+      console.log(action.payload?.cityData[0])
+      if(action.payload && action.payload.responseOkStatus){
+        dataToStore ={
+          cityName:action.payload.cityData[0].name,
+          temp: action.payload.cityData[0].main.temp,
+          sunrise: convertUnixTime(
+            action.payload.cityData[0].sys.sunrise
+          ),
+          sunset: convertUnixTime(
+            action.payload.cityData[0].sys.sunset
+          ),
+          weatherIconId:
+            action.payload.cityData[0].weather[0].icon,
+          
+        }
+        state.currentCityWeather = dataToStore;
+      }
+      if(action.payload && action.payload.responseOkStatus===false)
+        state.fetchError = action.payload.responseToReturn.message;
+    });
   },
 });
 
 // Action creators are generated for each case reducer function
 export const { deleteCityFromCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray, addNewCityToWeatherData } = WeatherData.actions;
-export { fetchWeatherThunk };
+export { fetchWeatherThunk, fetchSingleWeatherThunk };
 
 export default WeatherData.reducer;
