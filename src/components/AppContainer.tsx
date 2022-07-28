@@ -20,6 +20,7 @@ import {doc, getDoc,setDoc } from "firebase/firestore";
 import db from "../api/firebase";
 
 import MobileMenuSwitch from "./MobileMenu/MobileMenuSwitch";
+import Homepage from "./Homepage";
 import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
 import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
@@ -212,7 +213,12 @@ export default function AppContainer(props: any) {
           path="/mycities"
           element={<Group position={isDesktop? "left" : "center"} >{renderMainContent()}</Group>}
         />
-        <Route path="/" element={<div>Hello Weather Panel</div>} />
+        <Route 
+          path="/" 
+          element={
+              <Homepage />
+          } 
+        />
       </Routes>
       <button onClick={() => addFavCityToFirebase(userId, "Opole")}>DUPA</button>
       <button onClick={() => dispatch(fetchSingleWeatherThunk("Opole"))}>DUPA2</button>

@@ -90,7 +90,7 @@ export interface WeatherData {
   isFetched: boolean;
   numberOfCities: number;
   fetchError: string;
-  currentCityWeather: WeatherDetailsForCity
+  currentCityWeather: WeatherDetailsForCity;
 }
 
 const initialState: WeatherData = {
@@ -144,7 +144,6 @@ const fetchWeatherThunk = createAsyncThunk(
 const fetchSingleWeatherThunk = createAsyncThunk(
   "weather/getSingleWeather",
   async (cityName: string) => {
-    console.log("dupa2")
     let cityData: any = [];
     let responseOkStatus: boolean = false;
     let responseToReturn: any = null;
