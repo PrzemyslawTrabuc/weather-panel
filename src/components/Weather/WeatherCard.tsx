@@ -1,14 +1,10 @@
 import React, {useEffect, useState, useRef} from "react";
-import { Card, Image, Text, Button, Group, Modal, LoadingOverlay, Transition } from '@mantine/core';
+import { Card, Text, Button, Group, Modal, LoadingOverlay, Transition } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
-import {doc, getDoc, setDoc } from "firebase/firestore";
-import db from "../../api/firebase";
-import {selectCityFromUsersList} from "../UserData/UserDataSlice";
-import {toggleModal, hideModal} from '../Modal/ModalSlice';
 
 import WeatherIcon from './WeatherIcon';
-import {moveItemLeftInArray, moveItemRightInArray} from "../WeatherData/WeatherDataSlice";
+import {moveItemLeftInArray, moveItemRightInArray, deleteCityFromCities} from "../WeatherData/WeatherDataSlice";
 
 const WeatherCardStyle:React.CSSProperties = { 
   maxWidth:'400px',
@@ -20,50 +16,34 @@ const WeatherCardTextStyle:React.CSSProperties = {
 
 
 const WeatherCard = (props:any) =>{
-  const test = useRef(false);
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
-  const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
-  const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
   const dispatch = useDispatch(); 
 
   const [animate, setAnimate] = useState(true);
 
-  const pushFavListOrderToFirebase = async(userId: string)=>{
-    let dataToInsert:Array<string> = []
-    const document:any = await getDoc(doc(db, "UsersData", userId))
-    let currentData: Array<string> = [];       
-    weatherData.forEach((element)=>{
-      dataToInsert.push(element.cityName);
-    })
-    if(test.current){
-      await setDoc(doc(db, "UsersData", userId),{
-        favCities: dataToInsert
-      })  
-    }
-  }  
+
+  const deleteFavCityFromFirebase = (cityId : number)=>{
+    setAnimate(false); 
+    setTimeout(()=>setAnimate(true),300);
+    setTimeout(()=> dispatch(deleteCityFromCities(cityId)),300); 
+    props.toggleTest();
+  }
  
   const handleMoveCardLeft = () =>{  
     setAnimate(false); 
-    setTimeout(()=>setAnimate(true),300)
-    setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);    
-    test.current = true 
+    setTimeout(()=>setAnimate(true),300);
+    setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
+    props.toggleTest(); 
   }
 
   const handleMoveCardRight = () =>{    
     setAnimate(false); 
     setTimeout(()=>setAnimate(true),300)
-    setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
-    test.current = true 
+    setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300); 
+    props.toggleTest();
   }
 
-  useEffect(()=>{
-    if(userId && test.current === true){
-      pushFavListOrderToFirebase(userId);
-    }
-  },[weatherData])
-
-  console.log(userId)
   const renderCard = () =>{
     console.log("weatherCard")
     return(
@@ -124,6 +104,7 @@ const WeatherCard = (props:any) =>{
               {isDesktop ? <i className="fa-solid fa-arrow-right"></i> : <i className="fa-solid fa-arrow-down"></i>}
           </Button>
           </Group>
+          <button onClick={() => deleteFavCityFromFirebase(props.cityNumber)}>DEL_DUPA</button>
         </Card>  
       </div>      
        }
@@ -133,7 +114,8 @@ const WeatherCard = (props:any) =>{
 
     return (
       <>
-      {renderCard()}
+        {renderCard()}
+        {}
       </>
     )
 }

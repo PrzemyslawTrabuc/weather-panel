@@ -73,10 +73,9 @@ import convertUnixTime from "../../tools/convertUnixTime";
 
 export interface SwapCities{
   cityIndexInArrayToChange: number,
-  cityDataToUseAsTemp: Test
+  cityDataToUseAsTemp: WeatherDetailsForCity
 }
-
-export interface Test {
+export interface WeatherDetailsForCity {
   cityName: string;
   temp: number;
   sunrise: string;
@@ -86,7 +85,7 @@ export interface Test {
 
 export interface WeatherData {
   cities: [
-   Test
+    WeatherDetailsForCity
   ];
   isFetched: boolean;
   numberOfCities: number;
@@ -110,7 +109,7 @@ const initialState: WeatherData = {
 
 const fetchWeatherThunk = createAsyncThunk(
   "weather/getWeather",
-  async (cities: Array<string>, thunkAPI) => {
+  async (cities: Array<string>) => {
     let gatheredData: any = [];
     let responseOkStatus: boolean = false;
     let responseToReturn: any = null;
@@ -138,8 +137,9 @@ export const WeatherData = createSlice({
   name: "WeatherData",
   initialState,
   reducers: {
-    setCities: (state: any, action: PayloadAction<WeatherData>) => {
-      state.cities = action.payload;
+    deleteCityFromCities: (state: any, action: PayloadAction<number>) => {
+      state.numberOfCities -= 1;
+      state.cities.splice(action.payload,1);
     },
     clearWeatherData:(state:any)=>{
       state.cities = [{
@@ -164,14 +164,17 @@ export const WeatherData = createSlice({
         state.cities[action.payload.cityIndexInArrayToChange] = state.cities[action.payload.cityIndexInArrayToChange+1]
         state.cities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp
       }
-    }
+    },
+    addNewCityToWeatherData(state:any, action:PayloadAction<WeatherDetailsForCity>){
+      state.cities.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchWeatherThunk.fulfilled, (state, action) => {
-      let data: Test;
+      let data: WeatherDetailsForCity;
       state.numberOfCities = 0;
-      let gatheredData:[Test] = 
+      let gatheredData:[WeatherDetailsForCity] = 
       [
         {
           cityName: "loading...",
@@ -223,7 +226,7 @@ export const WeatherData = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray } = WeatherData.actions;
+export const { deleteCityFromCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray, addNewCityToWeatherData } = WeatherData.actions;
 export { fetchWeatherThunk };
 
 export default WeatherData.reducer;

@@ -1,42 +1,83 @@
-import React, {useMemo, useEffect} from 'react';
+import React, {useMemo, useEffect, useRef} from 'react';
 import WeatherCard from './WeatherCard';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../../store/store';
+import type { RootState, AppDispatch } from '../../store/store';
 import {Loader, Center, Modal, Text} from "@mantine/core";
 import {toggleModal, hideModal} from '../Modal/ModalSlice';
 import {selectCityFromUsersList} from "../UserData/UserDataSlice";
+import {doc, getDoc, setDoc} from "firebase/firestore";
+import db from "../../api/firebase";
+import {fetchWeatherThunk} from '../WeatherData/WeatherDataSlice';
+import { setNumberOfFavUsersCities} from "../UserData/UserDataSlice"
+
 
 const UsersWeatherCards = (props:any) =>{
-  const dispatch = useDispatch();
+  const dispatch:AppDispatch = useDispatch();
   const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
   const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
   const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
   const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
   const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
+  const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
+  const test = useRef(false);
+  const test2 = useRef(false);
 
   const handleDetailsClick = (cityNumber:number) =>{
     dispatch(selectCityFromUsersList(cityNumber))
     dispatch(toggleModal());
   }
 
+  const toggleTest = ()=>{
+    test.current=true;
+  }
+
   const handleCloseModal = () =>{
     dispatch(hideModal())
   }
 
-  useEffect(() => {
+  const pushFavListOrderToFirebase = async(userId: string)=>{
+    console.log("GOGOGOGOGO")
+    let dataToInsert:Array<string> = []
+    weatherData.forEach((element)=>{
+      dataToInsert.push(element.cityName);
+    })
+      await setDoc(doc(db, "UsersData", userId),{
+        favCities: dataToInsert
+      }) 
+      console.log(dataToInsert)
+  }
+
+  useEffect(()=>{
+    console.log(test.current)
+    if(userId && props.numberOfCitiesStored === weatherData.length && test.current===true){
+      console.log("effect!");
+      dispatch(setNumberOfFavUsersCities(weatherData.length))
+      pushFavListOrderToFirebase(userId);
+    }
   },[weatherData])
-  
-    const buildWeatherCardsList = (numberOfCitiesStored:number) =>{
+
+
+  useEffect(()=>{
+    console.log("DUPA DUPA")
+    if(userId && userFavCities && test2.current===false)
+      dispatch(fetchWeatherThunk(userFavCities));
+      test2.current = true;
+  },[location.pathname])
+
+
+    const buildWeatherCardsList = () =>{
         let counter:number = 0;
         if(props.isWeatherDataFetched){
           const items:any[] = [];
-          while(counter < numberOfCitiesStored){      
+          while(counter < weatherData.length){      
             items.push(
               <WeatherCard 
                 key={counter}
                 cityNumber={counter} 
                 weatherData={props.weatherData[counter]}
                 handleDetailsClick={handleDetailsClick} 
+                pushFavListOrderToFirebase={pushFavListOrderToFirebase}
+                toggleTest={toggleTest}
               >
               </WeatherCard>
             )
@@ -46,7 +87,7 @@ const UsersWeatherCards = (props:any) =>{
         }
         if(props.isWeatherDataFetched === false){
           const items:any[] = [];
-          while(counter <= numberOfFavUsersCities){      
+          while(counter <= weatherData.length){      
             items.push(<WeatherCard key={counter} weatherData={props.weatherData[0]} cityNumber={counter}></WeatherCard>)
             counter++;     
           }
@@ -55,21 +96,21 @@ const UsersWeatherCards = (props:any) =>{
       }
 
     const renderWeatherCards = () =>{
-      console.log(userFavCities.length)
       console.log("userWeatherCards")
+      console.log(numberOfFavUsersCities)
         if(props.isWeatherDataFetched && numberOfFavUsersCities > 0)
           return(
             <>
-              {buildWeatherCardsList(props.numberOfCitiesStored)}             
+              {buildWeatherCardsList()}             
             </>
           ) 
-        if(props.isWeatherDataFetched === false && userFavCities.length !== 0)
+        if(props.isWeatherDataFetched === false && numberOfFavUsersCities > 0)
           return(   
             <Center>
               <Loader size="xl"></Loader>
             </Center>            
           )
-          if(props.isWeatherDataFetched === false && userFavCities.length === 0){
+          if(numberOfFavUsersCities === 0){
             return(   
               <Center>
                 <Text>
@@ -87,6 +128,7 @@ const UsersWeatherCards = (props:any) =>{
       return(
         <>
             {MemoizedCards}
+            {weatherData[numberOfselectedCity]?
             <Modal
               opened={isOpenModal}
               onClose={handleCloseModal}
@@ -96,6 +138,15 @@ const UsersWeatherCards = (props:any) =>{
             >
               {weatherData[numberOfselectedCity].cityName}
             </Modal>
+            : 
+            <Modal
+            opened={false}
+            onClose={handleCloseModal}
+            overlayOpacity={0.1}
+            overlayBlur={3}
+          >
+            </Modal>
+            }
         </>
       )
 }

@@ -7,17 +7,15 @@ import type { RootState, AppDispatch } from './store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchWeatherThunk} from './components/WeatherData/WeatherDataSlice';
 import {setNumberOfFavUsersCities, setUserFavCities} from './components/UserData/UserDataSlice'
-import {doc, getDoc } from "firebase/firestore";
+import {doc, getDoc, setDoc } from "firebase/firestore";
 import db from "./api/firebase";
 import {initializeDarkModefromCookie} from "./components/DarkModeSwitch/DarkModeSwitchSlice";
 import getCookie from "./tools/getCookie";
-import Modal from "./components/Modal"
 
 
 const App =()=> {
   const dispatch:AppDispatch = useDispatch();
   const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
-  const [test, setTest] = useState([]);
  
   useEffect(() => {
     if(getCookie("isDark") === "true")
@@ -28,7 +26,6 @@ const App =()=> {
 
   const getUsersFavCities = async(userId:string) =>{
     const docRef = doc(db, "UsersData", userId);
-    console.log("FIREBASE!!")
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data().favCities.length);
@@ -38,17 +35,16 @@ const App =()=> {
       console.log("No such document!");
     }
   }
-
   const getFavCitiesWeatherByUserId = async(userId: string) =>{
-    let citiesArray = await saveNumberOfFavUsersCitieInStore(userId);
+    let citiesArray:Array<string> = await saveNumberOfFavUsersCitieInStore(userId);
     dispatch(fetchWeatherThunk(citiesArray));   
   }
-
+  
   const saveNumberOfFavUsersCitieInStore = async(userId: string)=>{
     let citiesArray = await getUsersFavCities(userId);
     dispatch(setNumberOfFavUsersCities(citiesArray.length))
     dispatch(setUserFavCities(citiesArray))
-    return citiesArray
+    return citiesArray;
   }
 
   return (     

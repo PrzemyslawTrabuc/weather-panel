@@ -16,13 +16,17 @@ import { BrandGithub } from "tabler-icons-react";
 import type { RootState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
+import {doc, getDoc,setDoc } from "firebase/firestore";
+import db from "../api/firebase";
 
 import MobileMenuSwitch from "./MobileMenu/MobileMenuSwitch";
 import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
 import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
 import UsersWeatherCards from "./Weather/UsersWeatherCards";
-import { clearWeatherData } from "./WeatherData/WeatherDataSlice";
+import { clearWeatherData, WeatherDetailsForCity, addNewCityToWeatherData } from "./WeatherData/WeatherDataSlice";
+
+
 export default function AppContainer(props: any) {
   const shouldEffect = useRef(true);
   const theme = useMantineTheme();
@@ -38,6 +42,19 @@ export default function AppContainer(props: any) {
 
   let favRefreshInterval: number = 0;
 
+  const addFavCityToFirebase = async(userId: string, cityName:string)=>{    
+    let dataToInsert:Array<string> = []
+    weatherData.forEach((element)=>{
+      if(element.temp != -0)
+      dataToInsert.push(element.cityName);
+    })
+    dataToInsert.push(cityName);
+      await setDoc(doc(db, "UsersData", userId),{
+        favCities: dataToInsert
+      })  
+      //TODO: add fetching only one weather city add push it into weather data
+  }
+
   const handleMobileMenu = () => {
     if (!isDesktop) dispatch(toggleMobileMenu());
   };
@@ -50,7 +67,7 @@ export default function AppContainer(props: any) {
 
   useEffect(() => {
     if (userId && location.pathname === "/mycities") {
-      //favRefreshInterval = window.setInterval(refreshWeatherData, 3000);
+      //favRefreshInterval = window.setInterval(refreshWeatherData, 10000);
     }
     return () => {
       clearInterval(favRefreshInterval);
@@ -61,7 +78,7 @@ export default function AppContainer(props: any) {
     if (userId && location.pathname === "/mycities") {
       props.getFavCitiesWeatherByUserId(userId);
     }
-  }, [location.pathname, userId]);
+  }, [userId]);
 
   useEffect(() => {
     if (location.pathname !== "/mycities") 
@@ -70,7 +87,7 @@ export default function AppContainer(props: any) {
 
   const refreshWeatherData = () => {
     dispatch(clearWeatherData());
-    props.getFavCitiesWeatherByUserId(userId);
+    dispatch(() => props.getFavCitiesWeatherByUserId(userId))
   };
 
   const renderMainContent = () => {
@@ -195,6 +212,7 @@ export default function AppContainer(props: any) {
         />
         <Route path="/" element={<div>Hello Weather Panel</div>} />
       </Routes>
+      <button onClick={() => addFavCityToFirebase(userId, "Marsylia")}>DUPA</button>
     </AppShell>
   );
 }

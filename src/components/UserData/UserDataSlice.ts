@@ -10,14 +10,14 @@ export interface UserData {
   const initialState: UserData = {
     numberOfFavUsersCities: 0, 
     citySelectedByUserOnHisList: 0,
-    userFavCities: ["add some cities"]
+    userFavCities: []
   }
   
   export const UserData = createSlice({
     name: 'UserData',
     initialState,
     reducers: {
-      setNumberOfFavUsersCities: (state:any, action: PayloadAction<UserData>) => {
+      setNumberOfFavUsersCities: (state:any, action: PayloadAction<number>) => {
         // Redux Toolkit allows us to write "mutating" logic in reducers. It
         // doesn't actually mutate the state because it uses the Immer library,
         // which detects changes to a "draft state" and produces a brand new
