@@ -75,11 +75,17 @@ export interface SwapCities{
   cityIndexInArrayToChange: number,
   cityDataToUseAsTemp: WeatherDetailsForCity
 }
+
+export interface Time{
+  hour: string,
+  minutes:string
+}
+
 export interface WeatherDetailsForCity {
   cityName: string;
   temp: number;
-  sunrise: string;
-  sunset: string;
+  sunrise:Time;
+  sunset: Time
   weatherIconId: string;
 }
 
@@ -91,6 +97,8 @@ export interface WeatherData {
   numberOfCities: number;
   fetchError: string;
   currentCityWeather: WeatherDetailsForCity;
+  weather:any;
+  forecast:any;
 }
 
 const initialState: WeatherData = {
@@ -98,8 +106,8 @@ const initialState: WeatherData = {
     {
       cityName: "loading...",
       temp: 99999,
-      sunrise: "loading...",
-      sunset: "loading...",
+      sunrise: {hour: '21', minutes: '37'},
+      sunset: {hour: '21', minutes: '37'},
       weatherIconId: "11d",
     },
   ],
@@ -109,10 +117,12 @@ const initialState: WeatherData = {
   currentCityWeather: {
       cityName: "loading...",
       temp: 99999,
-      sunrise: "loading...",
-      sunset: "loading...",
+      sunrise: {hour: '21', minutes: '37'},
+      sunset: {hour: '21', minutes: '37'},
       weatherIconId: "11d",
-  }
+  },
+  weather: [],
+  forecast: [],
 };
 
 const fetchWeatherThunk = createAsyncThunk(
@@ -129,6 +139,37 @@ const fetchWeatherThunk = createAsyncThunk(
       if (response.ok === true) {
         responseOkStatus = true;
         gatheredData.push(data);
+
+      } else {
+        responseToReturn = data;
+      }
+    }
+    if (responseOkStatus === false) {
+      return { responseToReturn, responseOkStatus };
+    }
+    console.log(gatheredData);
+    if (responseOkStatus === true) return { gatheredData, responseOkStatus };
+  }
+);
+
+const fetchForecastThunk = createAsyncThunk(
+  "weather/getForecast",
+  async (cities: Array<string>) => {
+    let gatheredData: any = [];
+    let responseOkStatus: boolean = false;
+    let responseToReturn: any = null;
+    let weather: any = [];
+    let forecast: any = [];
+    for (const element of cities) {
+      const response = await fetch(
+        `${baseUrl}forecast?&units=metric&q=${element}&appid=${apiKey}`
+      );
+      const data = await response.json();
+      if (response.ok === true) {
+        responseOkStatus = true;
+        gatheredData.push(data);
+        weather.push(data);
+
       } else {
         responseToReturn = data;
       }
@@ -171,6 +212,8 @@ export const WeatherData = createSlice({
     deleteCityFromCities: (state: any, action: PayloadAction<number>) => {
       state.numberOfCities -= 1;
       state.cities.splice(action.payload,1);
+      state.weather.gatheredData.splice(action.payload,1);
+      state.forecast.gatheredData.splice(action.payload,1);
     },
     clearWeatherData:(state:any)=>{
       state.cities = [{
@@ -198,6 +241,7 @@ export const WeatherData = createSlice({
     },
     addNewCityToWeatherData(state:any, action:PayloadAction<WeatherDetailsForCity>){
       state.cities.push(action.payload);
+      state.numberOfCities++;
     },
   },
   extraReducers: (builder) => {
@@ -210,8 +254,8 @@ export const WeatherData = createSlice({
         {
           cityName: "loading...",
           temp: 99999,
-          sunrise: "loading...",
-          sunset: "loading...",
+          sunrise: {hour: '21', minutes: '37'},
+          sunset: {hour: '21', minutes: '37'},
           weatherIconId: "11d"
         }
       ];
@@ -232,14 +276,15 @@ export const WeatherData = createSlice({
                 action.payload.gatheredData[counter].weather[0].icon,
             };
             if(counter === 0)
-              gatheredData[0] = (data);
+              gatheredData[0] = data;
             if(counter !== 0)
               gatheredData.push(data);
               state.numberOfCities++;
           }
           counter++;
         }
-        console.log(gatheredData)
+        console.log(gatheredData);
+        state.weather = action.payload;
         state.cities = gatheredData;
         state.isFetched = true;
       }
@@ -275,11 +320,14 @@ export const WeatherData = createSlice({
       if(action.payload && action.payload.responseOkStatus===false)
         state.fetchError = action.payload.responseToReturn.message;
     });
-  },
+    builder.addCase(fetchForecastThunk.fulfilled, (state, action) => {
+      state.forecast = action.payload
+    });
+  },  
 });
 
 // Action creators are generated for each case reducer function
 export const { deleteCityFromCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray, addNewCityToWeatherData } = WeatherData.actions;
-export { fetchWeatherThunk, fetchSingleWeatherThunk };
+export { fetchWeatherThunk, fetchSingleWeatherThunk, fetchForecastThunk };
 
 export default WeatherData.reducer;

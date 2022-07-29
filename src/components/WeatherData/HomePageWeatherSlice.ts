@@ -14,8 +14,8 @@ import convertUnixTime from '../../tools/convertUnixTime'
    weather: {
     cityName: "loading...",
     temp: 99999,
-    sunrise: "loading...",
-    sunset: "loading...",
+    sunrise: {hour: '21', minutes: '37'},
+    sunset: {hour: '21', minutes: '37'},
     weatherIconId: "11d",
    }, 
    forecast: {},
@@ -99,7 +99,7 @@ import convertUnixTime from '../../tools/convertUnixTime'
         });
 
         builder.addCase(fetchForecastForHomePage.fulfilled, (state, action) => {
-         console.log(action.payload)
+         state.forecast = action.payload.forecast;
       });
     }
   })

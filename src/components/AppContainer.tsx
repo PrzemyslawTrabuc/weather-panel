@@ -26,7 +26,7 @@ import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
 import UsersWeatherCards from "./Weather/UsersWeatherCards";
 import { clearWeatherData, WeatherDetailsForCity, addNewCityToWeatherData, fetchSingleWeatherThunk } from "./WeatherData/WeatherDataSlice";
-import { setNumberOfFavUsersCities } from "./UserData/UserDataSlice";
+import { setNumberOfFavUsersCities, setUserFavCities } from "./UserData/UserDataSlice";
 
 
 export default function AppContainer(props: any) {
@@ -56,6 +56,20 @@ export default function AppContainer(props: any) {
         favCities: dataToInsert
       })  
       dispatch(addNewCityToWeatherData(currentCityWeather))
+      dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities+1))
+      dispatch(setUserFavCities(dataToInsert));
+  }
+
+  const pushFavListOrderToFirebase = async(userId: string)=>{
+    console.log("GOGOGOGOGO")
+    let dataToInsert:Array<string> = []
+    weatherData.forEach((element)=>{
+      dataToInsert.push(element.cityName);
+    })
+      await setDoc(doc(db, "UsersData", userId),{
+        favCities: dataToInsert
+      }) 
+      console.log(dataToInsert);
   }
 
   const handleMobileMenu = () => {
@@ -104,6 +118,7 @@ export default function AppContainer(props: any) {
       }
       return (
         <UsersWeatherCards
+          pushFavListOrderToFirebase={()=>pushFavListOrderToFirebase(userId)}
           numberOfCitiesStored={numberOfCitiesStored}
           weatherData={weatherData}
           isWeatherDataFetched={isWeatherDataFetched}
@@ -111,7 +126,7 @@ export default function AppContainer(props: any) {
       );
     }
   };
-
+  console.log("appContainer")
   return (
     <AppShell
       styles={{

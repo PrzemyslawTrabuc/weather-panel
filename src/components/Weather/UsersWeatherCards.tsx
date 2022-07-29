@@ -7,7 +7,7 @@ import {toggleModal, hideModal} from '../Modal/ModalSlice';
 import {selectCityFromUsersList} from "../UserData/UserDataSlice";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import db from "../../api/firebase";
-import {fetchWeatherThunk, clearWeatherData} from '../WeatherData/WeatherDataSlice';
+import {fetchWeatherThunk, clearWeatherData, fetchForecastThunk} from '../WeatherData/WeatherDataSlice';
 import { setNumberOfFavUsersCities} from "../UserData/UserDataSlice"
 
 
@@ -35,24 +35,12 @@ const UsersWeatherCards = (props:any) =>{
     dispatch(hideModal())
   }
 
-  const pushFavListOrderToFirebase = async(userId: string)=>{
-    console.log("GOGOGOGOGO")
-    let dataToInsert:Array<string> = []
-    weatherData.forEach((element)=>{
-      dataToInsert.push(element.cityName);
-    })
-      await setDoc(doc(db, "UsersData", userId),{
-        favCities: dataToInsert
-      }) 
-      console.log(dataToInsert);
-  }
 
   useEffect(()=>{
     console.log(test.current)
     if(userId && props.numberOfCitiesStored === weatherData.length && test.current===true){
       console.log("effect!");
-      dispatch(setNumberOfFavUsersCities(weatherData.length))
-      pushFavListOrderToFirebase(userId);
+      props.pushFavListOrderToFirebase(userId);
     }
   },[weatherData])
 
@@ -60,6 +48,7 @@ const UsersWeatherCards = (props:any) =>{
   useEffect(()=>{
     if(userId && userFavCities && test2.current===false)
       dispatch(fetchWeatherThunk(userFavCities));
+      dispatch(fetchForecastThunk(userFavCities));
       test2.current = true;
   },[location.pathname])
 
@@ -75,7 +64,7 @@ const UsersWeatherCards = (props:any) =>{
                 cityNumber={counter} 
                 weatherData={props.weatherData[counter]}
                 handleDetailsClick={handleDetailsClick} 
-                pushFavListOrderToFirebase={pushFavListOrderToFirebase}
+                pushFavListOrderToFirebase={()=>props.pushFavListOrderToFirebase(userId)}
                 toggleTest={toggleTest}
               >
               </WeatherCard>
@@ -96,7 +85,6 @@ const UsersWeatherCards = (props:any) =>{
 
     const renderWeatherCards = () =>{
       console.log("userWeatherCards")
-      console.log(numberOfFavUsersCities)
         if(props.isWeatherDataFetched && numberOfFavUsersCities > 0)
           return(
             <>

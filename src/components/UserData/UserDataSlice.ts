@@ -28,7 +28,7 @@ export interface UserData {
       selectCityFromUsersList: (state:any, action:PayloadAction<number>) => {
         state.citySelectedByUserOnHisList = action.payload;
       },
-      setUserFavCities:(state:any, action: PayloadAction<UserData>) =>{
+      setUserFavCities:(state:any, action: PayloadAction<Array<string>>) => {
         state.userFavCities = action.payload;
       },
       clearUserData: (state:any) => {

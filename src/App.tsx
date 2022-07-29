@@ -5,7 +5,7 @@ import AppContainer from './components/AppContainer';
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
 import type { RootState, AppDispatch } from './store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import {fetchWeatherThunk} from './components/WeatherData/WeatherDataSlice';
+import {fetchWeatherThunk, fetchForecastThunk} from './components/WeatherData/WeatherDataSlice';
 import {setNumberOfFavUsersCities, setUserFavCities} from './components/UserData/UserDataSlice'
 import {doc, getDoc, setDoc } from "firebase/firestore";
 import db from "./api/firebase";
@@ -37,7 +37,8 @@ const App =()=> {
   }
   const getFavCitiesWeatherByUserId = async(userId: string) =>{
     let citiesArray:Array<string> = await saveNumberOfFavUsersCitieInStore(userId);
-    dispatch(fetchWeatherThunk(citiesArray));   
+    dispatch(fetchWeatherThunk(citiesArray));  
+    dispatch(fetchForecastThunk(citiesArray)); 
   }
   
   const saveNumberOfFavUsersCitieInStore = async(userId: string)=>{
