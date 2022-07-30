@@ -5,21 +5,17 @@ import {baseUrl, apiKey} from "../../api/WeatherAPI";
 import convertUnixTime from '../../tools/convertUnixTime'
   
   export interface WeahterDataWithForecast{
-    weahter: WeatherDetailsForCity;
+    weahter: any;
     forecast: any;
-    cityOnHomePage: string
+    error: string;
+    isFetched: boolean;
   }
 
   const initialState = {
-   weather: {
-    cityName: "loading...",
-    temp: 99999,
-    sunrise: {hour: '21', minutes: '37'},
-    sunset: {hour: '21', minutes: '37'},
-    weatherIconId: "11d",
-   }, 
+   weather: {},
    forecast: {},
-   cityOnHomePage: "Paryż"
+   error: "no error",
+   isFetched: false,
   }
 
   const fetchWeatherForHomePage = createAsyncThunk(
@@ -34,7 +30,7 @@ import convertUnixTime from '../../tools/convertUnixTime'
         const data = await response.json();
         if (response.ok === true) {
           responseOkStatus = true;
-          weather.push(data);
+          weather = data;
         } else {
           responseToReturn = data;
         }
@@ -57,7 +53,7 @@ import convertUnixTime from '../../tools/convertUnixTime'
         const data = await response.json();
         if (response.ok === true) {
           responseOkStatus = true;
-          forecast.push(data);
+          forecast = data;
         } else {
           responseToReturn = data;
         }
@@ -78,28 +74,29 @@ import convertUnixTime from '../../tools/convertUnixTime'
     },
     extraReducers: (builder) => {
         builder.addCase(fetchWeatherForHomePage.fulfilled, (state, action) => {
-            let dataToStore: WeatherDetailsForCity;
-            console.log(action.payload?.weather[0])
+
             if(action.payload && action.payload.responseOkStatus){
-              dataToStore ={
-                cityName:action.payload.weather[0].name,
-                temp: action.payload.weather[0].main.temp,
-                sunrise: convertUnixTime(
-                  action.payload.weather[0].sys.sunrise
-                ),
-                sunset: convertUnixTime(
-                  action.payload.weather[0].sys.sunset
-                ),
-                weatherIconId:
-                  action.payload.weather[0].weather[0].icon,
-                
-              }
-              state.weather = dataToStore;
+              state.weather = action.payload.weather;
+              state.isFetched = true;
+              return
+            }
+            if(action.payload && !action.payload.responseOkStatus){
+              state.error = action.payload.responseToReturn;
+              state.isFetched = false
             }
         });
 
         builder.addCase(fetchForecastForHomePage.fulfilled, (state, action) => {
-         state.forecast = action.payload.forecast;
+          if(action.payload && action.payload.responseOkStatus){
+            state.forecast = action.payload.forecast;
+            state.isFetched = true;
+            return
+          }           
+          if(action.payload && !action.payload.responseOkStatus){
+            state.error = action.payload.responseToReturn;
+            state.isFetched = false
+          } 
+           
       });
     }
   })

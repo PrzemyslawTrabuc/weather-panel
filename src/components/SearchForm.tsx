@@ -15,7 +15,6 @@ const SearchForm = () => {
   const onSubmit = (cityName: string, event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     document.cookie = `cityOnHomePage=${cityName}`;
-    dispatch(setCityOnHomePage(cityName))
     dispatch(fetchWeatherForHomePage(cityName));
     dispatch(fetchForecastForHomePage(cityName));
   };

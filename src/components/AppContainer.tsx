@@ -25,7 +25,7 @@ import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
 import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
 import UsersWeatherCards from "./Weather/UsersWeatherCards";
-import { clearWeatherData, WeatherDetailsForCity, addNewCityToWeatherData, fetchSingleWeatherThunk } from "./WeatherData/WeatherDataSlice";
+import { clearWeatherData, addNewCityToWeatherData } from "./WeatherData/WeatherDataSlice";
 import { setNumberOfFavUsersCities, setUserFavCities } from "./UserData/UserDataSlice";
 
 
@@ -37,37 +37,41 @@ export default function AppContainer(props: any) {
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
   const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
-  const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
-  const currentCityWeather = useSelector((state: RootState) => state.WeatherData.currentCityWeather);
+  const weatherData = useSelector((state: RootState) => state.WeatherData.weather.gatheredData);
+  const homepageWeather = useSelector((state: RootState) => state.HomePageWeather);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
   const numberOfCitiesStored = useSelector((state: RootState) => state.WeatherData.numberOfCities);
   const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
+  const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
 
   let favRefreshInterval: number = 0;
 
-  const addFavCityToFirebase = async(userId: string, cityName:string)=>{    
-    let dataToInsert:Array<string> = []
-    weatherData.forEach((element:any)=>{
-      if(element.temp !== 99999)
-      dataToInsert.push(element.cityName);
-    })
-    dataToInsert.push(cityName);
+  const addFavCityToFirebase = async(userId: string, cityName:string)=>{   
+    console.log(userId, cityName)
+    if(!userFavCities.includes(cityName)){ 
+    dispatch(addNewCityToWeatherData(homepageWeather))
+    let dataToInsert:Array<string> = [];
+    if(userFavCities.length > 0)
+      userFavCities.forEach((element:string)=>{
+        dataToInsert.push(element);
+      })
+      dataToInsert.push(cityName);
       await setDoc(doc(db, "UsersData", userId),{
         favCities: dataToInsert
       })  
-      dispatch(addNewCityToWeatherData(currentCityWeather))
       dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities+1))
       dispatch(setUserFavCities(dataToInsert));
+    }else
+      alert("City is already on list")
   }
 
   const pushFavListOrderToFirebase = async(userId: string)=>{
-    console.log("GOGOGOGOGO")
     let dataToInsert:Array<string> = []
-    weatherData.forEach((element)=>{
-      dataToInsert.push(element.cityName);
+    userFavCities.forEach((element:string)=>{
+      dataToInsert.push(element);
     })
       await setDoc(doc(db, "UsersData", userId),{
-        favCities: dataToInsert
+        favCities: dataToInsert,
       }) 
       console.log(dataToInsert);
   }
@@ -226,17 +230,19 @@ export default function AppContainer(props: any) {
       <Routes>
         <Route
           path="/mycities"
-          element={<Group position={isDesktop? "left" : "center"} >{renderMainContent()}</Group>}
+          element={
+            <Group position={isDesktop ? "left" : "center"} >
+              {renderMainContent()}
+            </Group>
+          }
         />
         <Route 
           path="/" 
           element={
-              <Homepage />
+              <Homepage addFavCity={addFavCityToFirebase} />
           } 
         />
       </Routes>
-      <button onClick={() => addFavCityToFirebase(userId, "Opole")}>DUPA</button>
-      <button onClick={() => dispatch(fetchSingleWeatherThunk("Opole"))}>DUPA2</button>
     </AppShell>
   );
 }

@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
-import { Card, Text, Button, Group, Modal, LoadingOverlay, Transition } from '@mantine/core';
+import { Card, Text, Button, Group, Modal, LoadingOverlay, Transition, Space } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../../store/store';
+import type { RootState, AppDispatch } from '../../store/store';
 
 import WeatherIcon from './WeatherIcon';
 import {moveItemLeftInArray, moveItemRightInArray, deleteCityFromCities} from "../WeatherData/WeatherDataSlice";
@@ -26,31 +26,33 @@ const WeatherCard = (props:any) =>{
   const [animate, setAnimate] = useState(true);
 
   const deleteFavCityFromStore = (cityId:number) =>{
-    dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities-1));
     dispatch(deleteUserFavCity(cityId));
+    dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities-1));    
   }
 
   const deleteFavCityFromFirebase = (cityId : number)=>{
-    setAnimate(false); 
-    setTimeout(()=>setAnimate(true),300);
+    setAnimate(false);    
+    dispatch(deleteUserFavCity(cityId));
+    setTimeout(()=>setAnimate(true),300);    
     setTimeout(()=> dispatch(deleteCityFromCities(cityId)),300); 
     setTimeout(()=>deleteFavCityFromStore(cityId),300)
     props.toggleTest();
+    
   }
  
   const handleMoveCardLeft = () =>{  
     setAnimate(false); 
     setTimeout(()=>setAnimate(true),300);
-    setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
     setTimeout(()=>dispatch(moveFavCityLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
+    setTimeout(()=>dispatch(moveItemLeftInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);  
     props.toggleTest(); 
   }
 
   const handleMoveCardRight = () =>{    
     setAnimate(false); 
-    setTimeout(()=>setAnimate(true),300)
-    setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300); 
+    setTimeout(()=>setAnimate(true),300);
     setTimeout(()=>dispatch(moveFavCityRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300);   
+    setTimeout(()=>dispatch(moveItemRightInArray({cityIndexInArrayToChange:props.cityNumber, cityDataToUseAsTemp:props.weatherData})), 300); 
     props.toggleTest();
   }
 
@@ -64,7 +66,7 @@ const WeatherCard = (props:any) =>{
         <LoadingOverlay visible={!isWeatherDataFetched} /> 
           <Card.Section>
             <Group position="left" spacing="xs">
-              <WeatherIcon iconId={props.weatherData.weatherIconId} />
+              <WeatherIcon iconId={props.weatherData.weather[0].icon} />
               <Text
                 style={WeatherCardTextStyle}
                 sx={
@@ -72,13 +74,13 @@ const WeatherCard = (props:any) =>{
                 }
                 weight={700}
               >
-                {props.weatherData.temp} °C
+                {props.weatherData.main.temp} °C
               </Text>
             </Group>
           </Card.Section>
           <Group position="apart" style={{ marginBottom: 5 }}>
             <Text size="xl" weight={700}>
-              {props.weatherData.cityName}
+              {props.weatherData.name}
             </Text>
           </Group>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
@@ -114,7 +116,11 @@ const WeatherCard = (props:any) =>{
               {isDesktop ? <i className="fa-solid fa-arrow-right"></i> : <i className="fa-solid fa-arrow-down"></i>}
           </Button>
           </Group>
-          <button onClick={() => deleteFavCityFromFirebase(props.cityNumber)}>DEL_DUPA</button>
+          <Space h="sm"/>
+          <Text align="right">
+            <Button color="red" size="xs" compact onClick={() => deleteFavCityFromFirebase(props.cityNumber)}><i className="fa-solid fa-trash-can"></i></Button>
+          </Text>
+          
         </Card>  
       </div>      
        }

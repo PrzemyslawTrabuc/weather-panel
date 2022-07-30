@@ -16,7 +16,7 @@ const UsersWeatherCards = (props:any) =>{
   const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
   const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
   const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
-  const weatherData = useSelector((state: RootState) => state.WeatherData.cities);
+  const weatherData = useSelector((state: RootState) => state.WeatherData.weather.gatheredData);
   const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
   const test = useRef(false);
@@ -38,7 +38,7 @@ const UsersWeatherCards = (props:any) =>{
 
   useEffect(()=>{
     console.log(test.current)
-    if(userId && props.numberOfCitiesStored === weatherData.length && test.current===true){
+    if(userId && weatherData && props.numberOfCitiesStored === weatherData.length && test.current===true){
       console.log("effect!");
       props.pushFavListOrderToFirebase(userId);
     }
@@ -115,15 +115,15 @@ const UsersWeatherCards = (props:any) =>{
       return(
         <>
             {MemoizedCards}
-            {weatherData[numberOfselectedCity]?
+            {weatherData && weatherData[numberOfselectedCity]?
             <Modal
               opened={isOpenModal}
               onClose={handleCloseModal}
-              title={`Details About: ${weatherData[numberOfselectedCity].cityName}`}
+              title={`Details About: ${weatherData[numberOfselectedCity].name}`}
               overlayOpacity={0.1}
               overlayBlur={3}
             >
-              {weatherData[numberOfselectedCity].cityName}
+              {weatherData[numberOfselectedCity].name}
             </Modal>
             : 
             <Modal

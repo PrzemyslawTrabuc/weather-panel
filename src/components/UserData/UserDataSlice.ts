@@ -42,14 +42,14 @@ export interface UserData {
       moveFavCityLeftInArray(state: any, action: PayloadAction<SwapCities>){
         if(state.userFavCities[action.payload.cityIndexInArrayToChange-1]){
           state.userFavCities[action.payload.cityIndexInArrayToChange] = state.userFavCities[action.payload.cityIndexInArrayToChange-1]
-          state.userFavCities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp.cityName
+          state.userFavCities[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp.name
         }
       },
       moveFavCityRightInArray(state: any, action: PayloadAction<SwapCities>){
         console.log(action.payload)
         if(state.userFavCities[action.payload.cityIndexInArrayToChange+1]){
           state.userFavCities[action.payload.cityIndexInArrayToChange] = state.userFavCities[action.payload.cityIndexInArrayToChange+1]
-          state.userFavCities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp.cityName
+          state.userFavCities[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp.name
         }
       },
     },
