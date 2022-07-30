@@ -90,14 +90,14 @@ import convertUnixTime from '../../tools/convertUnixTime'
 
         builder.addCase(fetchForecastForHomePage.fulfilled, (state, action) => {
           if(action.payload && action.payload.responseOkStatus){
-            state.error = "no error";
+            //state.error = "no error";
             state.forecast = action.payload.forecast;
             state.isFetched = true;
             return
           }           
           if(action.payload && !action.payload.responseOkStatus){
-            state.error = action.payload.responseToReturn;
-            state.isFetched = false
+            //state.error = action.payload.responseToReturn;
+            //state.isFetched = false
           } 
            
       });
