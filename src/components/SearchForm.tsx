@@ -10,15 +10,19 @@ const SearchForm = () => {
   const [searchValue, setSearchValue] = useState("Londyn");
   const error = useSelector((state: RootState) => state.HomePageWeather.error);
   const test = useRef(true);
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
+    console.log(event.target.value);
     //TODO: Add debounce
   };
+
   const onSubmit = (cityName: string, event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(fetchWeatherForHomePage(cityName));
     dispatch(fetchForecastForHomePage(cityName));
     test.current=true;
+    renderAlert();
   };
 
   const renderAlert = ()=>{
@@ -45,7 +49,6 @@ const SearchForm = () => {
           </Group>
         </form>
       </Container>
-      {renderAlert()}
       </>
   );
 };
