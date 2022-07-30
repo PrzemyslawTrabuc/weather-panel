@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import db from "../api/firebase";
+import { showNotification } from '@mantine/notifications';
 
 import MobileMenuSwitch from "./MobileMenu/MobileMenuSwitch";
 import Homepage from "./Homepage";
@@ -64,6 +65,7 @@ export default function AppContainer(props: any) {
   const userFavCities = useSelector(
     (state: RootState) => state.UserData.userFavCities
   );
+  const error = useSelector((state: RootState) => state.HomePageWeather.error)
 
   let favRefreshInterval: number = 0;
 
@@ -82,7 +84,21 @@ export default function AppContainer(props: any) {
         });
         dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities + 1));
         dispatch(setUserFavCities(dataToInsert));
-      } else alert("City is already on list");
+        showNotification({
+          icon: <i className="fa-solid fa-check"></i>,
+          color:"green",
+          title: `City "${cityName}" has been added to your list `,
+          message: 'City correctly deleted from your list',
+        })
+      } else 
+        return(
+          showNotification({
+            icon: <i className="fa-solid fa-check"></i>,
+            color:"green",
+            title: 'City is already on Favourite List',
+            message: 'Check your list!',
+          })
+        );
     }
   };
 

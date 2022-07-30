@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css';
 import AppContainer from './components/AppContainer';
-import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
+import { MantineProvider, ColorSchemeProvider, ColorScheme} from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import type { RootState, AppDispatch } from './store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchWeatherThunk, fetchForecastThunk} from './components/WeatherData/WeatherDataSlice';
@@ -50,8 +51,9 @@ const App =()=> {
 
   return (     
         <MantineProvider theme={{colorScheme: isDarkModeOn ? "dark" : "light"}} withGlobalStyles withNormalizeCSS>
-            <AppContainer saveNumberOfFavUsersCitieInStore={saveNumberOfFavUsersCitieInStore} getFavCitiesWeatherByUserId={getFavCitiesWeatherByUserId}>              
-            </AppContainer>
+          <NotificationsProvider>
+            <AppContainer saveNumberOfFavUsersCitieInStore={saveNumberOfFavUsersCitieInStore} getFavCitiesWeatherByUserId={getFavCitiesWeatherByUserId} />             
+          </NotificationsProvider>
         </MantineProvider>
   )
 }

@@ -31,6 +31,7 @@ import convertUnixTime from '../../tools/convertUnixTime'
         if (response.ok === true) {
           responseOkStatus = true;
           weather = data;
+          document.cookie = `cityOnHomePage=${cityName}`;
         } else {
           responseToReturn = data;
         }
@@ -50,10 +51,11 @@ import convertUnixTime from '../../tools/convertUnixTime'
         const response = await fetch(
           `${baseUrl}forecast?&units=metric&q=${cityName}&appid=${apiKey}`
         );
-        const data = await response.json();
+        const data = await response.json();        
         if (response.ok === true) {
           responseOkStatus = true;
           forecast = data;
+          document.cookie = `cityOnHomePage=${cityName}`;
         } else {
           responseToReturn = data;
         }
@@ -74,8 +76,8 @@ import convertUnixTime from '../../tools/convertUnixTime'
     },
     extraReducers: (builder) => {
         builder.addCase(fetchWeatherForHomePage.fulfilled, (state, action) => {
-
             if(action.payload && action.payload.responseOkStatus){
+              state.error = "no error";
               state.weather = action.payload.weather;
               state.isFetched = true;
               return
@@ -88,6 +90,7 @@ import convertUnixTime from '../../tools/convertUnixTime'
 
         builder.addCase(fetchForecastForHomePage.fulfilled, (state, action) => {
           if(action.payload && action.payload.responseOkStatus){
+            state.error = "no error";
             state.forecast = action.payload.forecast;
             state.isFetched = true;
             return

@@ -15,6 +15,7 @@ const Homepage=(props:any)=>{
     const userFavCities = useSelector((state:RootState)=> state.UserData.userFavCities);
     const userId = useSelector((state:RootState)=> state.GoogleAuth.userId);
 
+
     useEffect(()=>{
         let cityOnHomePageCookie:string = getCookie("cityOnHomePage")
         if(test.current === true){
@@ -36,6 +37,11 @@ const Homepage=(props:any)=>{
         else return false;    
     }
 
+    const handleAddToFavButtonClick = async() =>{
+         const response = await props.addFavCity(userId,homepageWeather.name);
+         console.log(response);
+    }
+
     return(
         <>
             <SearchForm></SearchForm>
@@ -44,7 +50,7 @@ const Homepage=(props:any)=>{
                 <Center>
                     <Group>
                         <Title>{homepageWeather.name}</Title>
-                        {userId ? <Button color={checkIfCityIsInUsersFav() ? "red" : ""}compact size="xs" onClick={() => props.addFavCity(userId,homepageWeather.name)}><i className="fa-solid fa-heart"></i></Button> : null}
+                        {userId ? <Button color={checkIfCityIsInUsersFav() ? "red" : ""}compact size="xs" onClick={handleAddToFavButtonClick}><i className="fa-solid fa-heart"></i></Button> : null}
                     </Group>
                 </Center>
                 <WeatherOnHomePage weatherData={homepageWeather}/>

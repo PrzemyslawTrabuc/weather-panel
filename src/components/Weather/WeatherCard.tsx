@@ -2,6 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import { Card, Text, Button, Group, Modal, LoadingOverlay, Transition, Space } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/store';
+import { showNotification } from '@mantine/notifications';
 
 import WeatherIcon from './WeatherIcon';
 import {moveItemLeftInArray, moveItemRightInArray, deleteCityFromCities} from "../WeatherData/WeatherDataSlice";
@@ -21,6 +22,7 @@ const WeatherCard = (props:any) =>{
   const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
   const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
   const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
+  const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
   const dispatch = useDispatch(); 
 
   const [animate, setAnimate] = useState(true);
@@ -37,7 +39,13 @@ const WeatherCard = (props:any) =>{
     setTimeout(()=> dispatch(deleteCityFromCities(cityId)),300); 
     setTimeout(()=>deleteFavCityFromStore(cityId),300)
     props.toggleTest();
-    
+
+    showNotification({
+      icon: <i className="fa-solid fa-trash-can"></i>,
+      color:"red",
+      title: `City "${userFavCities[cityId]}" has been deleted from you list `,
+      message: 'City correctly deleted from your list',
+    })
   }
  
   const handleMoveCardLeft = () =>{  
