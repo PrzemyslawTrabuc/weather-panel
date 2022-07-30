@@ -16,7 +16,7 @@ import { BrandGithub } from "tabler-icons-react";
 import type { RootState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
-import {doc, getDoc,setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import db from "../api/firebase";
 
 import MobileMenuSwitch from "./MobileMenu/MobileMenuSwitch";
@@ -25,9 +25,14 @@ import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
 import RightMenu from "./RightMenu";
 import LogoutButton from "./LogoutButton";
 import UsersWeatherCards from "./Weather/UsersWeatherCards";
-import { clearWeatherData, addNewCityToWeatherData } from "./WeatherData/WeatherDataSlice";
-import { setNumberOfFavUsersCities, setUserFavCities } from "./UserData/UserDataSlice";
-
+import {
+  clearWeatherData,
+  addNewCityToWeatherData,
+} from "./WeatherData/WeatherDataSlice";
+import {
+  setNumberOfFavUsersCities,
+  setUserFavCities,
+} from "./UserData/UserDataSlice";
 
 export default function AppContainer(props: any) {
   const shouldEffect = useRef(true);
@@ -35,56 +40,74 @@ export default function AppContainer(props: any) {
   const location = useLocation();
   const dispatch: AppDispatch = useDispatch();
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
-  const isMenuOpen = useSelector((state: RootState) => state.MobileMenuSwitch.isOpen);
-  const isDesktop = useSelector((state: RootState) => state.MobileMenuSwitch.isDesktop);
-  const weatherData = useSelector((state: RootState) => state.WeatherData.weather.gatheredData);
-  const homepageWeather = useSelector((state: RootState) => state.HomePageWeather);
-  const isWeatherDataFetched = useSelector((state: RootState) => state.WeatherData.isFetched);
-  const numberOfCitiesStored = useSelector((state: RootState) => state.WeatherData.numberOfCities);
-  const numberOfFavUsersCities = useSelector((state: RootState) => state.UserData.numberOfFavUsersCities);
-  const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
+  const isMenuOpen = useSelector(
+    (state: RootState) => state.MobileMenuSwitch.isOpen
+  );
+  const isDesktop = useSelector(
+    (state: RootState) => state.MobileMenuSwitch.isDesktop
+  );
+  const weatherData = useSelector(
+    (state: RootState) => state.WeatherData.weather.gatheredData
+  );
+  const homepageWeather = useSelector(
+    (state: RootState) => state.HomePageWeather
+  );
+  const isWeatherDataFetched = useSelector(
+    (state: RootState) => state.WeatherData.isFetched
+  );
+  const numberOfCitiesStored = useSelector(
+    (state: RootState) => state.WeatherData.numberOfCities
+  );
+  const numberOfFavUsersCities = useSelector(
+    (state: RootState) => state.UserData.numberOfFavUsersCities
+  );
+  const userFavCities = useSelector(
+    (state: RootState) => state.UserData.userFavCities
+  );
 
   let favRefreshInterval: number = 0;
 
-  const addFavCityToFirebase = async(userId: string, cityName:string)=>{   
-    console.log(userId, cityName)
-    if(!userFavCities.includes(cityName)){ 
-    dispatch(addNewCityToWeatherData(homepageWeather))
-    let dataToInsert:Array<string> = [];
-    if(userFavCities.length > 0)
-      userFavCities.forEach((element:string)=>{
-        dataToInsert.push(element);
-      })
-      dataToInsert.push(cityName);
-      await setDoc(doc(db, "UsersData", userId),{
-        favCities: dataToInsert
-      })  
-      dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities+1))
-      dispatch(setUserFavCities(dataToInsert));
-    }else
-      alert("City is already on list")
-  }
+  const addFavCityToFirebase = async (userId: string, cityName: string) => {
+    if (userId) {
+      if (!userFavCities.includes(cityName)) {
+        dispatch(addNewCityToWeatherData(homepageWeather));
+        let dataToInsert: Array<string> = [];
+        if (userFavCities.length > 0)
+          userFavCities.forEach((element: string) => {
+            dataToInsert.push(element);
+          });
+        dataToInsert.push(cityName);
+        await setDoc(doc(db, "UsersData", userId), {
+          favCities: dataToInsert,
+        });
+        dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities + 1));
+        dispatch(setUserFavCities(dataToInsert));
+      } else alert("City is already on list");
+    }
+  };
 
-  const pushFavListOrderToFirebase = async(userId: string)=>{
-    let dataToInsert:Array<string> = []
-    userFavCities.forEach((element:string)=>{
-      dataToInsert.push(element);
-    })
-      await setDoc(doc(db, "UsersData", userId),{
+  const pushFavListOrderToFirebase = async (userId: string) => {
+    if (userId) {
+      let dataToInsert: Array<string> = [];
+      userFavCities.forEach((element: string) => {
+        dataToInsert.push(element);
+      });
+      await setDoc(doc(db, "UsersData", userId), {
         favCities: dataToInsert,
-      }) 
+      });
       console.log(dataToInsert);
-  }
+    }
+  };
 
   const handleMobileMenu = () => {
     if (!isDesktop) dispatch(toggleMobileMenu());
   };
 
   useEffect(() => {
-    if(userId && location.pathname === "/"){
-      props.saveNumberOfFavUsersCitieInStore(userId);     
-  }
-  },[userId])
+    if (userId && location.pathname === "/") {
+      props.saveNumberOfFavUsersCitieInStore(userId);
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (userId && location.pathname === "/mycities") {
@@ -102,13 +125,12 @@ export default function AppContainer(props: any) {
   }, [userId]);
 
   useEffect(() => {
-    if (location.pathname !== "/mycities") 
-      clearInterval(favRefreshInterval);
+    if (location.pathname !== "/mycities") clearInterval(favRefreshInterval);
   }, [location.pathname]);
 
   const refreshWeatherData = () => {
     dispatch(clearWeatherData());
-    dispatch(() => props.getFavCitiesWeatherByUserId(userId))
+    dispatch(() => props.getFavCitiesWeatherByUserId(userId));
   };
 
   const renderMainContent = () => {
@@ -122,7 +144,7 @@ export default function AppContainer(props: any) {
       }
       return (
         <UsersWeatherCards
-          pushFavListOrderToFirebase={()=>pushFavListOrderToFirebase(userId)}
+          pushFavListOrderToFirebase={() => pushFavListOrderToFirebase(userId)}
           numberOfCitiesStored={numberOfCitiesStored}
           weatherData={weatherData}
           isWeatherDataFetched={isWeatherDataFetched}
@@ -130,7 +152,7 @@ export default function AppContainer(props: any) {
       );
     }
   };
-  console.log("appContainer")
+  console.log("appContainer");
   return (
     <AppShell
       styles={{
@@ -231,16 +253,14 @@ export default function AppContainer(props: any) {
         <Route
           path="/mycities"
           element={
-            <Group position={isDesktop ? "left" : "center"} >
+            <Group position={isDesktop ? "left" : "center"}>
               {renderMainContent()}
             </Group>
           }
         />
-        <Route 
-          path="/" 
-          element={
-              <Homepage addFavCity={addFavCityToFirebase} />
-          } 
+        <Route
+          path="/"
+          element={<Homepage addFavCity={addFavCityToFirebase} />}
         />
       </Routes>
     </AppShell>

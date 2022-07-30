@@ -44,7 +44,7 @@ const Homepage=(props:any)=>{
                 <Center>
                     <Group>
                         <Title>{homepageWeather.name}</Title>
-                        {userId ? <Button color={checkIfCityIsInUsersFav()? "red" : ""}compact size="xs" onClick={() => props.addFavCity(userId,homepageWeather.name)}><i className="fa-solid fa-heart"></i></Button> : null}
+                        {userId ? <Button color={checkIfCityIsInUsersFav() ? "red" : ""}compact size="xs" onClick={() => props.addFavCity(userId,homepageWeather.name)}><i className="fa-solid fa-heart"></i></Button> : null}
                     </Group>
                 </Center>
                 <WeatherOnHomePage weatherData={homepageWeather}/>
