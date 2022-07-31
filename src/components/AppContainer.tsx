@@ -93,9 +93,9 @@ export default function AppContainer(props: any) {
       } else 
         return(
           showNotification({
-            icon: <i className="fa-solid fa-check"></i>,
-            color:"green",
-            title: 'City is already on Favourite List',
+            icon: <i className="fa-solid fa-info"></i>,
+            color:"cyan",
+            title: `City "${cityName}" is already on Favourite List`,
             message: 'Check your list!',
           })
         );
