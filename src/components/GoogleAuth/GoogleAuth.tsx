@@ -59,7 +59,7 @@ const GoogleAuth = () => {
     if (!userId && !getCookie("userId")) {
       window.google.accounts.id.initialize({
         client_id:
-          "1030502307448-nmhaj2n273ahcd1ededol73i83arfotc.apps.googleusercontent.com",
+          "489858025664-9h0i3hdddglji4kpf7cll2f88vsiumlu.apps.googleusercontent.com",
         auto_select: true,
         callback: handleCallbackResponse,
       });
