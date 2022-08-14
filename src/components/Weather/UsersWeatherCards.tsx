@@ -5,10 +5,7 @@ import type { RootState, AppDispatch } from '../../store/store';
 import {Loader, Center, Modal, Text} from "@mantine/core";
 import {toggleModal, hideModal} from '../Modal/ModalSlice';
 import {selectCityFromUsersList} from "../UserData/UserDataSlice";
-import {doc, getDoc, setDoc} from "firebase/firestore";
-import db from "../../api/firebase";
 import {fetchWeatherThunk, clearWeatherData, fetchForecastThunk} from '../WeatherData/WeatherDataSlice';
-import { setNumberOfFavUsersCities} from "../UserData/UserDataSlice"
 
 
 const UsersWeatherCards = (props:any) =>{

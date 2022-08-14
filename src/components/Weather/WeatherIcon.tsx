@@ -9,9 +9,9 @@ interface WeatherIcon{
 
 const WeatherIcon = (props:WeatherIcon) =>{
         return(
-            <>
+            <div style={{width:'100px'}}>
                 <Image src={`${weatherImageBaseUrl}${props.iconId}@2x.png`}></Image>
-            </>
+            </div>
         )
 }
 

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import getCookie from "../tools/getCookie";
 import {Container, Button, Title, Center, Space, Group} from "@mantine/core";
 import WeatherOnHomePage from "./Weather/WeatherOnHomePage";
+import ForecastOnHomepage from "./Weather/ForecastOnHomepage";
 
 const Homepage=(props:any)=>{
     const dispatch:AppDispatch = useDispatch();
@@ -54,6 +55,7 @@ const Homepage=(props:any)=>{
                     </Group>
                 </Center>
                 <WeatherOnHomePage weatherData={homepageWeather}/>
+                <ForecastOnHomepage forecastData={homepageForecast}/>
             </Container>
         </>
     )

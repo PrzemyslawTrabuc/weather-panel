@@ -139,7 +139,6 @@ const WeatherCard = (props:any) =>{
     return (
       <>
         {renderCard()}
-        {}
       </>
     )
 }

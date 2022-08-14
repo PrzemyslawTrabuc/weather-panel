@@ -16,7 +16,7 @@ import { BrandGithub } from "tabler-icons-react";
 import type { RootState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import db from "../api/firebase";
 import { showNotification } from '@mantine/notifications';
 

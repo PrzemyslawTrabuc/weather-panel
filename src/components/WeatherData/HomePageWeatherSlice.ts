@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type {WeatherDetailsForCity} from "./WeatherDataSlice";
 import {baseUrl, apiKey} from "../../api/WeatherAPI";
 import convertUnixTime from '../../tools/convertUnixTime'
   
