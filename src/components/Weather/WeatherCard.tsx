@@ -31,7 +31,7 @@ const WeatherCard = (props:any) =>{
     //dispatch(deleteUserFavCity(cityId));
     dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities-1));    
   }
-
+//TODO: RENDER BADGE ONLY IS MORE THAN 2 CITIES
   const deleteFavCityFromFirebase = (cityId : number)=>{
     setAnimate(false);    
     dispatch(deleteUserFavCity(cityId));
