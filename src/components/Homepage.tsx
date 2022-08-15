@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import SearchForm from "./SearchForm";
-import {fetchWeatherForHomePage, fetchForecastForHomePage, setCityOnHomePage} from "./WeatherData/HomePageWeatherSlice";
+import {fetchWeatherForHomePage, fetchForecastForHomePage} from "./WeatherData/HomePageWeatherSlice";
 import type { RootState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import getCookie from "../tools/getCookie";
@@ -15,7 +15,6 @@ const Homepage=(props:any)=>{
     const homepageForecast:any = useSelector((state:RootState)=> state.HomePageWeather.forecast);
     const userFavCities = useSelector((state:RootState)=> state.UserData.userFavCities);
     const userId = useSelector((state:RootState)=> state.GoogleAuth.userId);
-
 
     useEffect(()=>{
         let cityOnHomePageCookie:string = getCookie("cityOnHomePage")

@@ -87,6 +87,8 @@ export interface WeatherData {
   fetchError: string;
   weather:any;
   forecast:any;
+  highestTemperature:number | null;
+  lowestTemperature:number | null;
 }
 
 const initialState: WeatherData = {
@@ -95,6 +97,8 @@ const initialState: WeatherData = {
   fetchError: "no error",
   weather: {gatheredData: []},
   forecast: {gatheredData: []},
+  highestTemperature: null,
+  lowestTemperature: null
 };
 
 const fetchWeatherThunk = createAsyncThunk(
@@ -206,6 +210,12 @@ export const WeatherData = createSlice({
       state.forecast.gatheredData.push(action.payload.forecast);
       state.numberOfCities++;
     },
+    setHighestTemperature(state:any, action:PayloadAction<number>){
+      state.highestTemperature = action.payload;
+    },
+    setLowestTemperature(state:any, action:PayloadAction<number>){
+      state.lowestTemperature = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -244,7 +254,7 @@ export const WeatherData = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { deleteCityFromCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray, addNewCityToWeatherData } = WeatherData.actions;
+export const { deleteCityFromCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray, addNewCityToWeatherData, setHighestTemperature, setLowestTemperature } = WeatherData.actions;
 export { fetchWeatherThunk, fetchForecastThunk };
 
 export default WeatherData.reducer;

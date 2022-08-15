@@ -1,15 +1,14 @@
-import React, {HtmlHTMLAttributes, useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { TextInput, Button, Group, Container } from '@mantine/core';
 import type { RootState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchWeatherForHomePage, fetchForecastForHomePage, setCityOnHomePage } from './WeatherData/HomePageWeatherSlice';
+import { fetchWeatherForHomePage, fetchForecastForHomePage } from './WeatherData/HomePageWeatherSlice';
 import { showNotification } from '@mantine/notifications';
 
 const SearchForm = () => {
   const dispatch: AppDispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("Londyn");
   const error = useSelector((state: RootState) => state.HomePageWeather.error);
-  const shouldRenderToast = useRef(true)
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchValue(event.target.value);  
@@ -26,12 +25,13 @@ const SearchForm = () => {
   };
 
   const renderAlert = () =>{
-    if(error !== "no error")
+    if(error !== "no error" && searchValue !== "Londyn"){
     showNotification({
       color: "red",
       title: `City: "${searchValue}" not found`,
       message: 'Try another city or check spelling',
-    })
+    });
+  }
   };
 
   return (

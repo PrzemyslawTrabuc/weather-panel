@@ -1,11 +1,11 @@
-import React, {useMemo, useEffect, useRef} from 'react';
+import React, {useMemo, useEffect, useRef, useState} from 'react';
 import WeatherCard from './WeatherCard';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/store';
 import {Loader, Center, Modal, Text} from "@mantine/core";
 import {toggleModal, hideModal} from '../Modal/ModalSlice';
 import {selectCityFromUsersList} from "../UserData/UserDataSlice";
-import {fetchWeatherThunk, clearWeatherData, fetchForecastThunk} from '../WeatherData/WeatherDataSlice';
+import {fetchWeatherThunk, fetchForecastThunk, setHighestTemperature, setLowestTemperature} from '../WeatherData/WeatherDataSlice';
 
 
 const UsersWeatherCards = (props:any) =>{
@@ -14,6 +14,8 @@ const UsersWeatherCards = (props:any) =>{
   const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
   const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
   const weatherData = useSelector((state: RootState) => state.WeatherData.weather.gatheredData);
+  const highestTemperature = useSelector((state: RootState) => state.WeatherData.highestTemperature);
+  const lowestTemperature = useSelector((state: RootState) => state.WeatherData.lowestTemperature);
   const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
   const userId = useSelector((state: RootState) => state.GoogleAuth.userId);
   const test = useRef(false);
@@ -32,6 +34,23 @@ const UsersWeatherCards = (props:any) =>{
     dispatch(hideModal())
   }
 
+  const getHottestCity = ()=>{
+   let highestTemperature:number = -9999;
+    for(const item of weatherData){
+      if(highestTemperature < item.main.temp)
+      highestTemperature = item.main.temp;
+    }
+    dispatch(setHighestTemperature(highestTemperature))
+  }
+  const getColdestCity = ()=>{
+    let lowestTemperature:number = 9999;
+     for(const item of weatherData){
+       if(lowestTemperature > item.main.temp)
+       lowestTemperature = item.main.temp;
+     }
+     dispatch(setLowestTemperature(lowestTemperature))
+   }
+
 
   useEffect(()=>{
     console.log(test.current)
@@ -47,7 +66,13 @@ const UsersWeatherCards = (props:any) =>{
       dispatch(fetchWeatherThunk(userFavCities));
       dispatch(fetchForecastThunk(userFavCities));
       test2.current = true;
+    
   },[location.pathname])
+
+  useEffect(()=>{
+    getHottestCity();
+    getColdestCity();
+  },[weatherData])
 
 
     const buildWeatherCardsList = () =>{
@@ -63,6 +88,8 @@ const UsersWeatherCards = (props:any) =>{
                 handleDetailsClick={handleDetailsClick} 
                 pushFavListOrderToFirebase={()=>props.pushFavListOrderToFirebase(userId)}
                 toggleTest={toggleTest}
+                highestTemperature={highestTemperature}
+                lowestTemperature={lowestTemperature}
               >
               </WeatherCard>
             )
@@ -107,7 +134,7 @@ const UsersWeatherCards = (props:any) =>{
 
       const MemoizedCards = useMemo(()=>{
           return renderWeatherCards()
-      },[weatherData, numberOfFavUsersCities])
+      },[weatherData, numberOfFavUsersCities, highestTemperature])
 
       return(
         <>

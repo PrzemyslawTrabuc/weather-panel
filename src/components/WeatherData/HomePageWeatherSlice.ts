@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit';
 import {baseUrl, apiKey} from "../../api/WeatherAPI";
-import convertUnixTime from '../../tools/convertUnixTime'
   
   export interface WeahterDataWithForecast{
     weahter: any;
@@ -69,8 +68,8 @@ import convertUnixTime from '../../tools/convertUnixTime'
     name: 'WeahterDataWithForecast',
     initialState,
     reducers: {
-      setCityOnHomePage: (state:any, action: PayloadAction<string>) => {
-       state.cityOnHomePage = action.payload;
+      clearError: (state:any) => {
+       state.error = "no error";
       },
     },
     extraReducers: (builder) => {
@@ -104,7 +103,7 @@ import convertUnixTime from '../../tools/convertUnixTime'
   })
   
   // Action creators are generated for each case reducer function
-  export const { setCityOnHomePage } = WeahterDataWithForecastSlice.actions
+  export const { clearError } = WeahterDataWithForecastSlice.actions
   export {fetchWeatherForHomePage, fetchForecastForHomePage}
   
   export default WeahterDataWithForecastSlice.reducer

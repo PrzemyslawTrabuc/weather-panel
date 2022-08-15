@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from "react";
-import { Card, Text, Button, Group, Modal, LoadingOverlay, Transition, Space } from '@mantine/core';
+import { Card, Text, Button, Group, Badge, LoadingOverlay, Transition, Space } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/store';
 import { showNotification } from '@mantine/notifications';
@@ -28,7 +28,7 @@ const WeatherCard = (props:any) =>{
   const [animate, setAnimate] = useState(true);
 
   const deleteFavCityFromStore = (cityId:number) =>{
-    dispatch(deleteUserFavCity(cityId));
+    //dispatch(deleteUserFavCity(cityId));
     dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities-1));    
   }
 
@@ -37,7 +37,7 @@ const WeatherCard = (props:any) =>{
     dispatch(deleteUserFavCity(cityId));
     setTimeout(()=>setAnimate(true),300);    
     setTimeout(()=> dispatch(deleteCityFromCities(cityId)),300); 
-    setTimeout(()=>deleteFavCityFromStore(cityId),300)
+    setTimeout(()=> deleteFavCityFromStore(cityId),300);
     props.toggleTest();
 
     showNotification({
@@ -90,6 +90,8 @@ const WeatherCard = (props:any) =>{
             <Text size="xl" weight={700}>
               {props.weatherData.name}
             </Text>
+            {props.highestTemperature === props.weatherData.main.temp ? <Badge color="orange" variant="filled">Hottest</Badge> : null}
+            {props.lowestTemperature === props.weatherData.main.temp ? <Badge color="cyan" variant="filled">Coldest</Badge> : null}
           </Group>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             Do dodania prognoza godzinowa
