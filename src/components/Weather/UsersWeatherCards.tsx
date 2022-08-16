@@ -62,12 +62,15 @@ const UsersWeatherCards = (props:any) =>{
 
 
   useEffect(()=>{
-    if(userId && userFavCities && test2.current===false)
+    if(userId && userFavCities.length >= 1 && test2.current===false){
       dispatch(fetchWeatherThunk(userFavCities));
       dispatch(fetchForecastThunk(userFavCities));
       test2.current = true;
-    
-  },[location.pathname])
+    }
+    if (userFavCities.length < 1){
+      props.fetchFavCities(userId);
+    }
+  },[location.pathname, userFavCities])
 
   useEffect(()=>{
     getHottestCity();

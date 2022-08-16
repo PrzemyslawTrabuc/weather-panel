@@ -52,7 +52,7 @@ const App =()=> {
   return (     
         <MantineProvider theme={{colorScheme: isDarkModeOn ? "dark" : "light"}} withGlobalStyles withNormalizeCSS>
           <NotificationsProvider>
-            <AppContainer saveNumberOfFavUsersCitieInStore={saveNumberOfFavUsersCitieInStore} getFavCitiesWeatherByUserId={getFavCitiesWeatherByUserId} />             
+            <AppContainer getUsersFavCities={getUsersFavCities} saveNumberOfFavUsersCitieInStore={saveNumberOfFavUsersCitieInStore} getFavCitiesWeatherByUserId={getFavCitiesWeatherByUserId} />             
           </NotificationsProvider>
         </MantineProvider>
   )

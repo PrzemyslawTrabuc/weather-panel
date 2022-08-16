@@ -90,8 +90,8 @@ const WeatherCard = (props:any) =>{
             <Text size="xl" weight={700}>
               {props.weatherData.name}
             </Text>
-            {props.highestTemperature === props.weatherData.main.temp ? <Badge color="orange" variant="filled">Hottest</Badge> : null}
-            {props.lowestTemperature === props.weatherData.main.temp ? <Badge color="cyan" variant="filled">Coldest</Badge> : null}
+            {props.highestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge color="orange" variant="filled">Hottest</Badge> : null}
+            {props.lowestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge color="cyan" variant="filled">Coldest</Badge> : null}
           </Group>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             Do dodania prognoza godzinowa

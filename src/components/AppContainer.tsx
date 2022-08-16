@@ -164,6 +164,7 @@ export default function AppContainer(props: any) {
           numberOfCitiesStored={numberOfCitiesStored}
           weatherData={weatherData}
           isWeatherDataFetched={isWeatherDataFetched}
+          fetchFavCities={() => props.getUsersFavCities(userId)}
         />
       );
     }
