@@ -1,6 +1,6 @@
 import React from 'react';
 import {LoadingOverlay, Container, Title, Center, Space, Group, Text, Stack} from "@mantine/core"
-import WeatherIcon from "./WeatherIcon";
+import WeatherIcon from "../Weather/WeatherIcon";
 
 const WeahterOnHomePage = (props:any) =>{
    if(Object.keys(props.weatherData).length > 0)

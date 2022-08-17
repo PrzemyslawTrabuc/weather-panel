@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css';
-import AppContainer from './components/AppContainer';
+import AppContainer from './components/AppContainer/AppContainer';
 import { MantineProvider, ColorSchemeProvider, ColorScheme} from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import type { RootState, AppDispatch } from './store/store';
@@ -11,7 +11,7 @@ import {setNumberOfFavUsersCities, setUserFavCities} from './components/UserData
 import {doc, getDoc, setDoc } from "firebase/firestore";
 import db from "./api/firebase";
 import {initializeDarkModefromCookie} from "./components/DarkModeSwitch/DarkModeSwitchSlice";
-import getCookie from "./tools/getCookie";
+import getCookie from "./utils/getCookie";
 
 
 const App =()=> {
@@ -25,7 +25,7 @@ const App =()=> {
       dispatch(initializeDarkModefromCookie(false));
   },[])
 
-  const getUsersFavCities = async(userId:string) =>{
+  const getUserFavCities = async(userId:string) =>{
     const docRef = doc(db, "UsersData", userId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -37,13 +37,13 @@ const App =()=> {
     }
   }
   const getFavCitiesWeatherByUserId = async(userId: string) =>{
-    let citiesArray:Array<string> = await saveNumberOfFavUsersCitieInStore(userId);
+    let citiesArray:Array<string> = await saveFavUsersCitiesInStore(userId);
     dispatch(fetchWeatherThunk(citiesArray));  
     dispatch(fetchForecastThunk(citiesArray)); 
   }
   
-  const saveNumberOfFavUsersCitieInStore = async(userId: string)=>{
-    let citiesArray = await getUsersFavCities(userId);
+  const saveFavUsersCitiesInStore = async(userId: string)=>{
+    let citiesArray = await getUserFavCities(userId);
     dispatch(setNumberOfFavUsersCities(citiesArray.length))
     dispatch(setUserFavCities(citiesArray))
     return citiesArray;
@@ -52,7 +52,7 @@ const App =()=> {
   return (     
         <MantineProvider theme={{colorScheme: isDarkModeOn ? "dark" : "light"}} withGlobalStyles withNormalizeCSS>
           <NotificationsProvider>
-            <AppContainer getUsersFavCities={getUsersFavCities} saveNumberOfFavUsersCitieInStore={saveNumberOfFavUsersCitieInStore} getFavCitiesWeatherByUserId={getFavCitiesWeatherByUserId} />             
+            <AppContainer saveFavUsersCitiesInStore={saveFavUsersCitiesInStore} getFavCitiesWeatherByUserId={getFavCitiesWeatherByUserId} />             
           </NotificationsProvider>
         </MantineProvider>
   )

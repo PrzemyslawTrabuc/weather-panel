@@ -1,5 +1,5 @@
 import React, {useMemo, useEffect, useRef, useState} from 'react';
-import WeatherCard from './WeatherCard';
+import WeatherCard from '../Weather/WeatherCard';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/store';
 import {Loader, Center, Modal, Text} from "@mantine/core";
@@ -60,16 +60,21 @@ const UsersWeatherCards = (props:any) =>{
     }
   },[weatherData])
 
-
-  useEffect(()=>{
+  const handleFetchFavCitiesAndWeatherData = async() =>{
+    if(userFavCities.length < 1){
+      props.fetchFavCities()
+    }
+    console.log("dsada")
     if(userId && userFavCities.length >= 1 && test2.current===false){
+      console.log("fetched!")
       dispatch(fetchWeatherThunk(userFavCities));
       dispatch(fetchForecastThunk(userFavCities));
       test2.current = true;
-    }
-    if (userFavCities.length < 1){
-      props.fetchFavCities(userId);
-    }
+    } 
+  }
+
+  useEffect(()=>{
+    handleFetchFavCitiesAndWeatherData();    
   },[location.pathname, userFavCities])
 
   useEffect(()=>{

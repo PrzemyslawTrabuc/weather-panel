@@ -1,12 +1,12 @@
 import React, {useEffect, useRef} from "react";
 import SearchForm from "./SearchForm";
-import {fetchWeatherForHomePage, fetchForecastForHomePage} from "./WeatherData/HomePageWeatherSlice";
-import type { RootState, AppDispatch } from "../store/store";
+import {fetchWeatherForHomePage, fetchForecastForHomePage} from "../Weather/HomePageWeatherSlice";
+import type { RootState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
-import getCookie from "../tools/getCookie";
+import getCookie from "../../utils/getCookie";
 import {Container, Button, Title, Center, Space, Group} from "@mantine/core";
-import WeatherOnHomePage from "./Weather/WeatherOnHomePage";
-import ForecastOnHomepage from "./Weather/ForecastOnHomepage";
+import WeatherOnHomePage from "./WeatherOnHomePage";
+import ForecastOnHomepage from "./ForecastOnHomepage";
 
 const Homepage=(props:any)=>{
     const dispatch:AppDispatch = useDispatch();

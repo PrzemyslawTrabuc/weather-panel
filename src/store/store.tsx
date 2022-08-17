@@ -5,7 +5,7 @@ import GoogleAuthReducer from '../components/GoogleAuth/GoogleAuthSlice';
 import WeatherDataReducer from '../components/WeatherData/WeatherDataSlice';
 import ModalReducer from '../components/Modal/ModalSlice';
 import UserDataReducer from '../components/UserData/UserDataSlice';
-import HomePageWeatherReducer from '../components/WeatherData/HomePageWeatherSlice'
+import HomePageWeatherReducer from '../components/Weather/HomePageWeatherSlice'
 
 
 export const store = configureStore({

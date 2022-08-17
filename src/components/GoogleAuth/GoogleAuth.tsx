@@ -5,7 +5,7 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import db from "../../api/firebase";
 
 import { signIn } from "./GoogleAuthSlice";
-import getCookie from "../../tools/getCookie";
+import getCookie from "../../utils/getCookie";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();

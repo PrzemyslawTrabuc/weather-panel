@@ -69,7 +69,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { apiKey, baseUrl } from "../../api/WeatherAPI";
 
-import convertUnixTime from "../../tools/convertUnixTime";
+import convertUnixTime from "../../utils/convertUnixTime";
 
 export interface SwapCities{
   cityIndexInArrayToChange: number,

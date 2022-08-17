@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { TextInput, Button, Group, Container } from '@mantine/core';
-import type { RootState, AppDispatch } from "../store/store";
+import type { RootState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchWeatherForHomePage, fetchForecastForHomePage } from './WeatherData/HomePageWeatherSlice';
+import { fetchWeatherForHomePage, fetchForecastForHomePage } from '../Weather/HomePageWeatherSlice';
 import { showNotification } from '@mantine/notifications';
 
 const SearchForm = () => {

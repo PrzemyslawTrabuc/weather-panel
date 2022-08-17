@@ -1,11 +1,11 @@
 import React from 'react';
 import { Group } from '@mantine/core';
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "../store/store";
+import type { RootState } from "../../store/store";
 
-import DarkModeSwitch from './DarkModeSwitch/DarkModeSwitch';
-import GoogleAuth from './GoogleAuth/GoogleAuth';
-import CurrentUserBadge from './CurrentUserBadge';
+import DarkModeSwitch from '../DarkModeSwitch/DarkModeSwitch';
+import GoogleAuth from '../GoogleAuth/GoogleAuth';
+import CurrentUserBadge from '../GoogleAuth/CurrentUserBadge';
 
 const RightMenu = () =>{
     const userId = useSelector((state: RootState) => state.GoogleAuth.userId);  

@@ -1,11 +1,11 @@
-import { signOut } from "./GoogleAuth/GoogleAuthSlice";
-import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
-import deleteCookie from "../tools/deleteCookie";
+import { signOut } from "./GoogleAuthSlice";
+import { toggleMobileMenu } from "../MobileMenu/MobileMenuSwitchSlice";
+import deleteCookie from "../../utils/deleteCookie";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from '@mantine/core';
-import type { RootState, AppDispatch } from '../store/store';
-import {clearWeatherData} from "./WeatherData/WeatherDataSlice";
-import {clearUserData} from "./UserData//UserDataSlice";
+import type { RootState, AppDispatch } from '../../store/store';
+import {clearWeatherData} from "../WeatherData/WeatherDataSlice";
+import {clearUserData} from "../UserData/UserDataSlice";
 
 const LogoutButton = () =>{
     const dispatch:AppDispatch = useDispatch();

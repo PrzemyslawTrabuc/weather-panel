@@ -13,27 +13,27 @@ import {
 } from "@mantine/core";
 
 import { BrandGithub } from "tabler-icons-react";
-import type { RootState, AppDispatch } from "../store/store";
+import type { RootState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
-import db from "../api/firebase";
+import db from "../../api/firebase";
 import { showNotification } from '@mantine/notifications';
 
-import MobileMenuSwitch from "./MobileMenu/MobileMenuSwitch";
-import Homepage from "./Homepage";
-import { toggleMobileMenu } from "./MobileMenu/MobileMenuSwitchSlice";
+import MobileMenuSwitch from "../MobileMenu/MobileMenuSwitch";
+import Homepage from "../Homepage/Homepage";
+import { toggleMobileMenu } from "../MobileMenu/MobileMenuSwitchSlice";
+import LogoutButton from "../GoogleAuth/LogoutButton";
+import UsersWeatherCards from "../FavouriteCities/UsersWeatherCards";
 import RightMenu from "./RightMenu";
-import LogoutButton from "./LogoutButton";
-import UsersWeatherCards from "./Weather/UsersWeatherCards";
 import {
   clearWeatherData,
   addNewCityToWeatherData,
-} from "./WeatherData/WeatherDataSlice";
+} from "../WeatherData/WeatherDataSlice";
 import {
   setNumberOfFavUsersCities,
   setUserFavCities,
-} from "./UserData/UserDataSlice";
+} from "../UserData/UserDataSlice";
 
 export default function AppContainer(props: any) {
   const shouldEffect = useRef(true);
@@ -65,9 +65,8 @@ export default function AppContainer(props: any) {
   const userFavCities = useSelector(
     (state: RootState) => state.UserData.userFavCities
   );
-  const error = useSelector((state: RootState) => state.HomePageWeather.error)
 
-  let favRefreshInterval: number = 0;
+  //let favRefreshInterval: number = 0;
 
   const addFavCityToFirebase = async (userId: string, cityName: string) => {
     if (userId) {
@@ -125,29 +124,29 @@ export default function AppContainer(props: any) {
     }
   }, [userId]);
 
-  useEffect(() => {
-    if (userId && location.pathname === "/mycities") {
-      //favRefreshInterval = window.setInterval(refreshWeatherData, 10000);
-    }
-    return () => {
-      clearInterval(favRefreshInterval);
-    };
-  });
+  // useEffect(() => {
+  //   if (userId && location.pathname === "/mycities") {
+  //     //favRefreshInterval = window.setInterval(refreshWeatherData, 10000);
+  //   }
+  //   return () => {
+  //     clearInterval(favRefreshInterval);
+  //   };
+  // });
 
-  useEffect(() => {
-    if (userId && location.pathname === "/mycities") {
-      props.getFavCitiesWeatherByUserId(userId);
-    }
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId && location.pathname === "/mycities") {
+  //     props.getFavCitiesWeatherByUserId(userId);
+  //   }
+  // }, [userId]);
 
-  useEffect(() => {
-    if (location.pathname !== "/mycities") clearInterval(favRefreshInterval);
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname !== "/mycities") clearInterval(favRefreshInterval);
+  // }, [location.pathname]);
 
-  const refreshWeatherData = () => {
-    dispatch(clearWeatherData());
-    dispatch(() => props.getFavCitiesWeatherByUserId(userId));
-  };
+  // const refreshWeatherData = () => {
+  //   dispatch(clearWeatherData());
+  //   dispatch(() => props.getFavCitiesWeatherByUserId(userId));
+  // };
 
   const renderMainContent = () => {
     if (userId) {
@@ -164,7 +163,7 @@ export default function AppContainer(props: any) {
           numberOfCitiesStored={numberOfCitiesStored}
           weatherData={weatherData}
           isWeatherDataFetched={isWeatherDataFetched}
-          fetchFavCities={() => props.getUsersFavCities(userId)}
+          fetchFavCities={() => props.saveFavUsersCitiesInStore(userId)}
         />
       );
     }

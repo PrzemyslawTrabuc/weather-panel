@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from 'react-dom';
 //import {Modal} from "@mantine/core";
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../store/store';
-import {toggleModal} from './Modal/ModalSlice';
+import type { RootState } from '../../store/store';
+import {toggleModal} from './ModalSlice';
 
 const Modal = (props:any) => {
     return ReactDOM.createPortal(
