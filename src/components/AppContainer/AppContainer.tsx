@@ -120,7 +120,7 @@ export default function AppContainer(props: any) {
 
   useEffect(() => {
     if (userId && location.pathname === "/") {
-      props.saveNumberOfFavUsersCitieInStore(userId);
+      props.saveFavUsersCitiesInStore(userId);
     }
   }, [userId]);
 
