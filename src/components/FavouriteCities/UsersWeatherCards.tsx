@@ -57,7 +57,8 @@ const UsersWeatherCards = (props:any) =>{
 
 
   useEffect(()=>{
-    if(userId && weatherData && props.numberOfCitiesStored === weatherData.length && test.current===true){
+    if(userId){
+      if(test.current===true)
       props.pushFavListOrderToFirebase(userId);
     }
   },[weatherData])

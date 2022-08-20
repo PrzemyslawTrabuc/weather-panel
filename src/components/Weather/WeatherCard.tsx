@@ -30,13 +30,12 @@ const WeatherCard = (props: any) => {
   const [animate, setAnimate] = useState(true);
 
   const deleteFavCityFromStore = (cityId: number) => {
-    //dispatch(deleteUserFavCity(cityId));
     dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities - 1));
   }
   //TODO: RENDER BADGE ONLY IS MORE THAN 2 CITIES
   const deleteFavCityFromFirebase = (cityId: number) => {
     setAnimate(false);
-    dispatch(deleteUserFavCity(cityId));
+    setTimeout(() => dispatch(deleteUserFavCity(cityId)),300);
     setTimeout(() => setAnimate(true), 300);
     setTimeout(() => dispatch(deleteCityFromCities(cityId)), 300);
     setTimeout(() => deleteFavCityFromStore(cityId), 300);
@@ -70,7 +69,7 @@ const WeatherCard = (props: any) => {
       <Transition mounted={animate} transition="fade" duration={300} timingFunction="ease">{
         (styles) =>
           <div style={styles}>
-            <Card className="weatherCard" shadow="sm" p="lg" style={{maxWidth:400}}>
+            <Card className="weatherCard" shadow="sm" p="lg" style={{width: !isDesktop? "90vw" : ""}}>
               <LoadingOverlay visible={!isWeatherDataFetched} />
               <Card.Section>
                 <Group position="left" spacing="xs">

@@ -10,6 +10,7 @@ import {
   Transition,
   Group,
   NavLink,
+  Space
 } from "@mantine/core";
 
 import { BrandGithub } from "tabler-icons-react";
@@ -188,7 +189,7 @@ export default function AppContainer(props: any) {
               hidden={!isMenuOpen}
               width={{ sm: 200, lg: 300 }}
             >
-              <Navbar.Section grow>
+              <Navbar.Section>
                 <Link to="/" style={{ textDecoration: "none" }}>
                   <NavLink
                     icon={<i className="fa-solid fa-house-chimney"></i>}
@@ -210,6 +211,7 @@ export default function AppContainer(props: any) {
                   </Link>
                 ) : null}
               </Navbar.Section>
+              <Space h={50} />
               <Navbar.Section>
                 <Center>
                   <Link to="/">
