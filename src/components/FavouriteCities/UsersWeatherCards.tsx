@@ -8,7 +8,7 @@ import {selectCityFromUsersList} from "../UserData/UserDataSlice";
 import {fetchWeatherThunk, fetchForecastThunk, setHighestTemperature, setLowestTemperature} from '../WeatherData/WeatherDataSlice';
 
 import WeatherOnHomePage from "../Homepage/WeatherOnHomePage";
-import ForecastOnHomepage from "../Homepage/ForecastCards";
+import ForecastOnHomepage from "../Weather/ForecastCards";
 
 
 const UsersWeatherCards = (props:any) =>{
@@ -155,6 +155,7 @@ const UsersWeatherCards = (props:any) =>{
               overlayOpacity={0.1}
               overlayBlur={3}
               size="100%"
+              closeButtonLabel="Close"
             >
                 <Stack>
                   <Title order={3} align="center">{weatherData[numberOfselectedCity].name} - details</Title>                

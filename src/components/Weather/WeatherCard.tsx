@@ -3,7 +3,7 @@ import { Card, Text, Button, Group, Badge, LoadingOverlay, Transition, Space, Ti
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
 import { showNotification } from '@mantine/notifications';
-import { Windsock, Cloud } from "tabler-icons-react";
+import { Windsock, Cloud, DropletFilled2 } from "tabler-icons-react";
 
 import WeatherIcon from './WeatherIcon';
 import { moveItemLeftInArray, moveItemRightInArray, deleteCityFromCities } from "../WeatherData/WeatherDataSlice";
@@ -32,7 +32,6 @@ const WeatherCard = (props: any) => {
   const deleteFavCityFromStore = (cityId: number) => {
     dispatch(setNumberOfFavUsersCities(numberOfFavUsersCities - 1));
   }
-  //TODO: RENDER BADGE ONLY IS MORE THAN 2 CITIES
   const deleteFavCityFromFirebase = (cityId: number) => {
     setAnimate(false);
     setTimeout(() => dispatch(deleteUserFavCity(cityId)),300);
@@ -89,8 +88,8 @@ const WeatherCard = (props: any) => {
                 <Title order={2}>
                   {props.weatherData.name}
                 </Title>
-                {props.highestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge color="orange" variant="filled">Hottest</Badge> : null}
-                {props.lowestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge color="cyan" variant="filled">Coldest</Badge> : null}
+                {props.highestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge size="lg" color="orange" variant="filled">Hottest</Badge> : null}
+                {props.lowestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge size="lg" color="cyan" variant="filled">Coldest</Badge> : null}
               </Group>
               <Space h="md"/>
               <Group spacing="sm" grow>
@@ -105,6 +104,12 @@ const WeatherCard = (props: any) => {
                 <Title order={4}>
                   {metersPerSecToKilometersPerH(props.weatherData.wind.speed).toFixed(2)} km/h
                 </Title>  
+                </div>
+                <div>
+                <DropletFilled2 size={30} />
+                    <Title order={4}>
+                        {props.weatherData.main.humidity} %                
+                    </Title>
                 </div>
               </Group>
               <Button
@@ -138,7 +143,7 @@ const WeatherCard = (props: any) => {
               </Group>
               <Space h="sm" />
               <Text align="right">
-                <Button color="red" size="xs" compact onClick={() => deleteFavCityFromFirebase(props.cityNumber)}><i className="fa-solid fa-trash-can"></i></Button>
+                <Button color="red" size="md" compact onClick={() => deleteFavCityFromFirebase(props.cityNumber)}><i className="fa-md fa-solid fa-trash-can"></i></Button>
               </Text>
 
             </Card>
