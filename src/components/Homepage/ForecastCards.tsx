@@ -36,30 +36,30 @@ const ForecastCards = (props: any) => {
         <Card style={{minWidth:200, backgroundColor: isModalOpen && !isDarkModeOn  ? theme.colors.gray[0] : "" }}>
           <Center>
             <Stack>
-              <Title align="center" size="h4">
+              <Title align="center" order={4}>
                 <i>{item.dt_txt.substring(5,16)}</i>
               </Title>
               <Center>
                 <WeatherIcon iconId={item.weather[0].icon} />
-                <Title align="center" size="h2">
+                <Title align="center" order={2}>
                   {item.main.temp} °C
                 </Title>
               </Center>
               <Group spacing="sm" grow>
                 <CloudRain />
-                <Title size="h5">{Math.round(item.pop * 100)} %</Title>
+                <Title order={5}>{Math.round(item.pop * 100)} %</Title>
                 <Cloud size={20} />
-                <Title size="h4">
+                <Title order={5}>
                     {item.clouds.all} %
                 </Title>
               </Group>
                 <Group>
                     <Windsock size={20} />
-                    <Title size="h5">
+                    <Title order={5}>
                         {metersPerSecToKilometersPerH(item.wind.speed).toFixed(2)} km/h         
                     </Title>
                     <DropletFilled2 size={20} />
-                    <Title size="h5">
+                    <Title order={5}>
                         {item.main.humidity} %                
                     </Title>
                 </Group>

@@ -157,7 +157,7 @@ const UsersWeatherCards = (props:any) =>{
               size="100%"
             >
                 <Stack>
-                  <Title size="h3" align="center">{weatherData[numberOfselectedCity].name} - details</Title>                
+                  <Title order={3} align="center">{weatherData[numberOfselectedCity].name} - details</Title>                
                   <WeatherOnHomePage weatherData={weatherData[numberOfselectedCity]}/>
                   <ForecastOnHomepage forecastData={forecastData[numberOfselectedCity]}/>
                   <Space h="xs" />

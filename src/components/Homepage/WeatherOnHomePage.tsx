@@ -15,31 +15,31 @@ const WeahterOnHomePage = (props:any) =>{
                             <Group>
                                 <Center>
                                 <WeatherIcon iconId={props.weatherData.weather[0].icon} />       
-                                <Title size="h1">{props.weatherData.main.temp} °C</Title>  
+                                <Title order={1}>{props.weatherData.main.temp} °C</Title>  
                                 </Center>
                             </Group>                                              
                         <Group>
                             <div>
                             <Cloud size={30} /> 
-                                <Title size="h5">
+                                <Title order={5}>
                                     {props.weatherData.clouds.all} %
                             </Title>  
                             </div> 
                             <div>
                             <Thermometer size={30} />
-                                <Title size="h5">
+                                <Title order={5}>
                                     {props.weatherData.main.feels_like} °C
                                 </Title>  
                             </div>
                             <div>  
                             <Windsock size={30} /> 
-                                <Title size="h5">
+                                <Title order={5}>
                                     {metersPerSecToKilometersPerH(props.weatherData.wind.speed).toFixed(2)} km/h
                             </Title>  
                             </div>  
                             <div>
                                 <DropletFilled2 size={30} />
-                                <Title size="h5">
+                                <Title order={5}>
                                     {props.weatherData.main.humidity} %
                                 </Title>  
                             </div>

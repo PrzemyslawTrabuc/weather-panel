@@ -86,7 +86,7 @@ const WeatherCard = (props: any) => {
                 </Group>
               </Card.Section>
               <Group position="apart" style={{ marginBottom: 5 }}>
-                <Title size="h2" weight={700}>
+                <Title order={2}>
                   {props.weatherData.name}
                 </Title>
                 {props.highestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge color="orange" variant="filled">Hottest</Badge> : null}
@@ -96,13 +96,13 @@ const WeatherCard = (props: any) => {
               <Group spacing="sm" grow>
                 <div>
                 <Cloud size={30} />
-                <Title size="h4">
+                <Title order={4}>
                 {props.weatherData.clouds.all} %
                 </Title>
                 </div>
                 <div>
                 <Windsock size={30}/>
-                <Title size="h4">
+                <Title order={4}>
                   {metersPerSecToKilometersPerH(props.weatherData.wind.speed).toFixed(2)} km/h
                 </Title>  
                 </div>
