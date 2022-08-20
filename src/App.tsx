@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import logo from './logo.svg'
+import React,{ useEffect } from 'react'
 import './App.css';
 import AppContainer from './components/AppContainer/AppContainer';
 import { MantineProvider, ColorSchemeProvider, ColorScheme} from '@mantine/core';
@@ -29,11 +28,9 @@ const App =()=> {
     const docRef = doc(db, "UsersData", userId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data().favCities.length);
       return docSnap.data().favCities;
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
     }
   }
   const getFavCitiesWeatherByUserId = async(userId: string) =>{
