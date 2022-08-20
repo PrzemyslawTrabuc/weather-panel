@@ -154,7 +154,7 @@ const UsersWeatherCards = (props:any) =>{
               onClose={handleCloseModal}
               overlayOpacity={0.1}
               overlayBlur={3}
-              size="90%"
+              size="100%"
             >
                 <Stack>
                   <Title size="h3" align="center">{weatherData[numberOfselectedCity].name} - details</Title>                

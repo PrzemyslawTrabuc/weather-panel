@@ -69,7 +69,7 @@ const WeatherCard = (props: any) => {
       <Transition mounted={animate} transition="fade" duration={300} timingFunction="ease">{
         (styles) =>
           <div style={styles}>
-            <Card className="weatherCard" shadow="sm" p="lg" style={{width: !isDesktop? "90vw" : ""}}>
+            <Card className="weatherCard" shadow="sm" p="lg" style={{width: !isDesktop? "90vw" : "385px"}}>
               <LoadingOverlay visible={!isWeatherDataFetched} />
               <Card.Section>
                 <Group position="left" spacing="xs">
@@ -93,15 +93,19 @@ const WeatherCard = (props: any) => {
                 {props.lowestTemperature === props.weatherData.main.temp && numberOfFavUsersCities > 2 ? <Badge color="cyan" variant="filled">Coldest</Badge> : null}
               </Group>
               <Space h="md"/>
-              <Group spacing="sm">
-                <Cloud size={25} />
+              <Group spacing="sm" grow>
+                <div>
+                <Cloud size={30} />
                 <Title size="h4">
                 {props.weatherData.clouds.all} %
                 </Title>
-                <Windsock size={25}/>
+                </div>
+                <div>
+                <Windsock size={30}/>
                 <Title size="h4">
                   {metersPerSecToKilometersPerH(props.weatherData.wind.speed).toFixed(2)} km/h
                 </Title>  
+                </div>
               </Group>
               <Button
                 onClick={() => props.handleDetailsClick(props.cityNumber)}

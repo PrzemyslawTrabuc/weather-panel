@@ -45,21 +45,21 @@ const ForecastCards = (props: any) => {
                   {item.main.temp} °C
                 </Title>
               </Center>
-              <Group spacing="sm">
+              <Group spacing="sm" grow>
                 <CloudRain />
-                <Title size="h4">{Math.round(item.pop * 100)} %</Title>
-                <Cloud size={25} />
+                <Title size="h5">{Math.round(item.pop * 100)} %</Title>
+                <Cloud size={20} />
                 <Title size="h4">
                     {item.clouds.all} %
                 </Title>
               </Group>
                 <Group>
-                    <Windsock size={25} />
-                    <Title size="h4">
-                        {metersPerSecToKilometersPerH(item.wind.speed).toFixed(2)}          
+                    <Windsock size={20} />
+                    <Title size="h5">
+                        {metersPerSecToKilometersPerH(item.wind.speed).toFixed(2)} km/h         
                     </Title>
-                    <DropletFilled2 size={25} />
-                    <Title size="h4">
+                    <DropletFilled2 size={20} />
+                    <Title size="h5">
                         {item.main.humidity} %                
                     </Title>
                 </Group>

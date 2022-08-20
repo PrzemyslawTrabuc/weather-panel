@@ -11,27 +11,38 @@ const WeahterOnHomePage = (props:any) =>{
             <>
             <Container>
                 <Space h="xl" />
-                    <Stack align="center" justify="center" spacing="xs">
-                        <WeatherIcon iconId={props.weatherData.weather[0].icon} />       
-                        <Title size="h1">{props.weatherData.main.temp} °C</Title>     
+                    <Stack align="center" justify="center" spacing="xs">                        
+                            <Group>
+                                <Center>
+                                <WeatherIcon iconId={props.weatherData.weather[0].icon} />       
+                                <Title size="h1">{props.weatherData.main.temp} °C</Title>  
+                                </Center>
+                            </Group>                                              
                         <Group>
-                            <Cloud size={45} /> 
-                                <Title size="h4">
+                            <div>
+                            <Cloud size={30} /> 
+                                <Title size="h5">
                                     {props.weatherData.clouds.all} %
-                            </Title>   
-                            <Thermometer size={45} />
-                                <Title size="h4">
+                            </Title>  
+                            </div> 
+                            <div>
+                            <Thermometer size={30} />
+                                <Title size="h5">
                                     {props.weatherData.main.feels_like} °C
                                 </Title>  
-                            <Windsock size={45} /> 
-                                <Title size="h4">
+                            </div>
+                            <div>  
+                            <Windsock size={30} /> 
+                                <Title size="h5">
                                     {metersPerSecToKilometersPerH(props.weatherData.wind.speed).toFixed(2)} km/h
                             </Title>  
-                          
-                                <DropletFilled2 size={45} />
-                                <Title size="h4">
+                            </div>  
+                            <div>
+                                <DropletFilled2 size={30} />
+                                <Title size="h5">
                                     {props.weatherData.main.humidity} %
                                 </Title>  
+                            </div>
                         </Group>        
                     </Stack>                                    
             </Container>
