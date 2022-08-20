@@ -13,7 +13,7 @@ import {initializeDarkModefromCookie} from "./components/DarkModeSwitch/DarkMode
 import getCookie from "./utils/getCookie";
 
 
-const App =()=> {
+const App = ()=> {
   const dispatch:AppDispatch = useDispatch();
   const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
  
