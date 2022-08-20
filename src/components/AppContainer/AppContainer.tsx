@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useEffect, useRef } from "react";
 import {
   AppShell,
   Navbar,
@@ -27,7 +27,6 @@ import LogoutButton from "../GoogleAuth/LogoutButton";
 import UsersWeatherCards from "../FavouriteCities/UsersWeatherCards";
 import RightMenu from "./RightMenu";
 import {
-  clearWeatherData,
   addNewCityToWeatherData,
 } from "../WeatherData/WeatherDataSlice";
 import {
@@ -47,9 +46,6 @@ export default function AppContainer(props: any) {
   const isDesktop = useSelector(
     (state: RootState) => state.MobileMenuSwitch.isDesktop
   );
-  const weatherData = useSelector(
-    (state: RootState) => state.WeatherData.weather.gatheredData
-  );
   const homepageWeather = useSelector(
     (state: RootState) => state.HomePageWeather
   );
@@ -65,8 +61,6 @@ export default function AppContainer(props: any) {
   const userFavCities = useSelector(
     (state: RootState) => state.UserData.userFavCities
   );
-
-  //let favRefreshInterval: number = 0;
 
   const addFavCityToFirebase = async (userId: string, cityName: string) => {
     if (userId) {
@@ -161,7 +155,6 @@ export default function AppContainer(props: any) {
         <UsersWeatherCards
           pushFavListOrderToFirebase={() => pushFavListOrderToFirebase(userId)}
           numberOfCitiesStored={numberOfCitiesStored}
-          weatherData={weatherData}
           isWeatherDataFetched={isWeatherDataFetched}
           fetchFavCities={() => props.saveFavUsersCitiesInStore(userId)}
         />

@@ -1,11 +1,14 @@
-import React, {useMemo, useEffect, useRef, useState} from 'react';
+import React, {useMemo, useEffect, useRef} from 'react';
 import WeatherCard from '../Weather/WeatherCard';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/store';
-import {Loader, Center, Modal, Text} from "@mantine/core";
+import {Loader, Center, Modal, Text, Title, Button, Stack, Space} from "@mantine/core";
 import {toggleModal, hideModal} from '../Modal/ModalSlice';
 import {selectCityFromUsersList} from "../UserData/UserDataSlice";
 import {fetchWeatherThunk, fetchForecastThunk, setHighestTemperature, setLowestTemperature} from '../WeatherData/WeatherDataSlice';
+
+import WeatherOnHomePage from "../Homepage/WeatherOnHomePage";
+import ForecastOnHomepage from "../Homepage/ForecastCards";
 
 
 const UsersWeatherCards = (props:any) =>{
@@ -14,6 +17,7 @@ const UsersWeatherCards = (props:any) =>{
   const isOpenModal = useSelector((state: RootState) => state.Modal.isOpen);
   const numberOfselectedCity = useSelector((state: RootState) => state.UserData.citySelectedByUserOnHisList);
   const weatherData = useSelector((state: RootState) => state.WeatherData.weather.gatheredData);
+  const forecastData = useSelector((state: RootState) => state.WeatherData.forecast.gatheredData);
   const highestTemperature = useSelector((state: RootState) => state.WeatherData.highestTemperature);
   const lowestTemperature = useSelector((state: RootState) => state.WeatherData.lowestTemperature);
   const userFavCities = useSelector((state: RootState) => state.UserData.userFavCities);
@@ -92,7 +96,8 @@ const UsersWeatherCards = (props:any) =>{
               <WeatherCard 
                 key={counter}
                 cityNumber={counter} 
-                weatherData={props.weatherData[counter]}
+                weatherData={weatherData[counter]}
+                forecastData={forecastData[counter]}
                 handleDetailsClick={handleDetailsClick} 
                 pushFavListOrderToFirebase={()=>props.pushFavListOrderToFirebase(userId)}
                 toggleTest={toggleTest}
@@ -108,7 +113,7 @@ const UsersWeatherCards = (props:any) =>{
         if(props.isWeatherDataFetched === false){
           const items:any[] = [];
           while(counter <= weatherData.length){      
-            items.push(<WeatherCard key={counter} weatherData={props.weatherData[0]} cityNumber={counter}></WeatherCard>)
+            items.push(<WeatherCard key={counter} forecastData={forecastData[0]} weatherData={weatherData[0]} cityNumber={counter}></WeatherCard>)
             counter++;     
           }
           return items;
@@ -142,7 +147,7 @@ const UsersWeatherCards = (props:any) =>{
 
       const MemoizedCards = useMemo(()=>{
           return renderWeatherCards()
-      },[weatherData, numberOfFavUsersCities, highestTemperature])
+      },[weatherData, forecastData, numberOfFavUsersCities, highestTemperature])
 
       return(
         <>
@@ -151,20 +156,20 @@ const UsersWeatherCards = (props:any) =>{
             <Modal
               opened={isOpenModal}
               onClose={handleCloseModal}
-              title={`Details About: ${weatherData[numberOfselectedCity].name}`}
               overlayOpacity={0.1}
               overlayBlur={3}
+              size="90%"
             >
-              {weatherData[numberOfselectedCity].name}
+                <Stack>
+                  <Title size="h3" align="center">{weatherData[numberOfselectedCity].name} - details</Title>                
+                  <WeatherOnHomePage weatherData={weatherData[numberOfselectedCity]}/>
+                  <ForecastOnHomepage forecastData={forecastData[numberOfselectedCity]}/>
+                  <Space h="xs" />
+                  <Button onClick={handleCloseModal}>Close</Button>
+                </Stack>
             </Modal>
             : 
-            <Modal
-            opened={false}
-            onClose={handleCloseModal}
-            overlayOpacity={0.1}
-            overlayBlur={3}
-          >
-            </Modal>
+            null
             }
         </>
       )

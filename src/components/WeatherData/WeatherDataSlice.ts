@@ -73,7 +73,8 @@ import convertUnixTime from "../../utils/convertUnixTime";
 
 export interface SwapCities{
   cityIndexInArrayToChange: number,
-  cityDataToUseAsTemp: any
+  cityWeatherToUseAsTemp: any, 
+  cityForecastToUseAsTemp: any
 }
 
 export interface Time{
@@ -193,15 +194,19 @@ export const WeatherData = createSlice({
     },
     moveItemLeftInArray(state: any, action: PayloadAction<SwapCities>){
       if(state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1]){
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1]
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1] = action.payload.cityDataToUseAsTemp
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1];
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1] = action.payload.cityWeatherToUseAsTemp;
+        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange] = state.forecast.gatheredData[action.payload.cityIndexInArrayToChange-1];
+        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange-1] = action.payload.cityForecastToUseAsTemp;    
       }
     },
     moveItemRightInArray(state: any, action: PayloadAction<SwapCities>){
       console.log(action.payload)
       if(state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1]){
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1]
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1] = action.payload.cityDataToUseAsTemp
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1];
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1] = action.payload.cityWeatherToUseAsTemp;    
+        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange] = state.forecast.gatheredData[action.payload.cityIndexInArrayToChange+1];
+        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange+1] = action.payload.cityForecastToUseAsTemp;    
       }
     },
     addNewCityToWeatherData(state:any, action:PayloadAction<any>){
