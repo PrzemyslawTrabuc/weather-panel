@@ -57,9 +57,7 @@ const UsersWeatherCards = (props:any) =>{
 
 
   useEffect(()=>{
-    console.log(test.current)
     if(userId && weatherData && props.numberOfCitiesStored === weatherData.length && test.current===true){
-      console.log("effect!");
       props.pushFavListOrderToFirebase(userId);
     }
   },[weatherData])
@@ -68,9 +66,7 @@ const UsersWeatherCards = (props:any) =>{
     if(userFavCities.length < 1){
       props.fetchFavCities()
     }
-    console.log("dsada")
     if(userId && userFavCities.length >= 1 && test2.current===false){
-      console.log("fetched!")
       dispatch(fetchWeatherThunk(userFavCities));
       dispatch(fetchForecastThunk(userFavCities));
       test2.current = true;
@@ -121,7 +117,6 @@ const UsersWeatherCards = (props:any) =>{
       }
 
     const renderWeatherCards = () =>{
-      console.log("userWeatherCards")
         if(props.isWeatherDataFetched && numberOfFavUsersCities > 0)
           return(
             <>
