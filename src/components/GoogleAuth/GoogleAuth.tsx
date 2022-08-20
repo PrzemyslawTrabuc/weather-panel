@@ -50,11 +50,10 @@ const GoogleAuth = () => {
   };
 
   useEffect(() => {
-    // console.log(getCookie("userName"));
-    // console.log(getCookie("userId"));
+    if(getCookie("userId"))
     dispatch(
       signIn({ userName: getCookie("userName"), userId: getCookie("userId") })
-    );
+);
 
     if (!userId && !getCookie("userId")) {
       window.google.accounts.id.initialize({
