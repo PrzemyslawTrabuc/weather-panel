@@ -3,8 +3,6 @@ import "./App.css";
 import AppContainer from "./components/AppContainer/AppContainer";
 import {
   MantineProvider,
-  ColorSchemeProvider,
-  ColorScheme,
 } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import type { RootState, AppDispatch } from "./store/store";
@@ -17,7 +15,7 @@ import {
   setNumberOfFavUsersCities,
   setUserFavCities,
 } from "./components/UserData/UserDataSlice";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import db from "./api/firebase";
 import { initializeDarkModefromCookie } from "./components/DarkModeSwitch/DarkModeSwitchSlice";
 import getCookie from "./utils/getCookie";
