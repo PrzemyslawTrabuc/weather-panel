@@ -69,8 +69,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { apiKey, baseUrl } from "../../api/WeatherAPI";
 
-import convertUnixTime from "../../utils/convertUnixTime";
-
 export interface SwapCities{
   cityIndexInArrayToChange: number,
   cityWeatherToUseAsTemp: any, 
@@ -124,7 +122,6 @@ const fetchWeatherThunk = createAsyncThunk(
     if (responseOkStatus === false) {
       return { responseToReturn, responseOkStatus };
     }
-    console.log(gatheredData);
     if (responseOkStatus === true) return { gatheredData, responseOkStatus };
   }
 );
@@ -201,7 +198,6 @@ export const WeatherData = createSlice({
       }
     },
     moveItemRightInArray(state: any, action: PayloadAction<SwapCities>){
-      console.log(action.payload)
       if(state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1]){
         state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1];
         state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1] = action.payload.cityWeatherToUseAsTemp;    
@@ -210,7 +206,6 @@ export const WeatherData = createSlice({
       }
     },
     addNewCityToWeatherData(state:any, action:PayloadAction<any>){
-      console.log(action.payload)
       state.weather.gatheredData.push(action.payload.weather);
       state.forecast.gatheredData.push(action.payload.forecast);
       state.numberOfCities++;
@@ -225,7 +220,6 @@ export const WeatherData = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchWeatherThunk.fulfilled, (state, action) => {
-      console.log(action.payload)
       if (action.payload && action.payload.responseOkStatus) {
         state.weather = action.payload;
         state.numberOfCities = action.payload.gatheredData.length;
@@ -244,7 +238,6 @@ export const WeatherData = createSlice({
       state.isFetched = false;
     });
     builder.addCase(fetchForecastThunk.fulfilled, (state, action) => {
-      console.log(action.payload)
       if (action.payload && action.payload.responseOkStatus) {
         state.forecast = action.payload;
         state.numberOfCities = action.payload.gatheredData.length;

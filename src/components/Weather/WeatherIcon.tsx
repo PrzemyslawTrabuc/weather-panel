@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, LoadingOverlay} from '@mantine/core';
+import {Image} from '@mantine/core';
 
 import {weatherImageBaseUrl} from '../../api/WeatherAPI';
 

@@ -1,8 +1,7 @@
 import React from "react";
-import { Avatar, Tooltip, useMantineTheme } from "@mantine/core";
-import { useSelector, useDispatch } from "react-redux";
+import { Avatar, Tooltip } from "@mantine/core";
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import { current } from "@reduxjs/toolkit";
 
 const CurrentUserBadge = () => {
   const currentUser = useSelector(

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Group } from '@mantine/core';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 
 import DarkModeSwitch from '../DarkModeSwitch/DarkModeSwitch';

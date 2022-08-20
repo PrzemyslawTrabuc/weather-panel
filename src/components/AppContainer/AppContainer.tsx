@@ -1,4 +1,4 @@
-import React, {useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import {
   AppShell,
   Navbar,
@@ -104,7 +104,6 @@ export default function AppContainer(props: any) {
       await setDoc(doc(db, "UsersData", userId), {
         favCities: dataToInsert,
       });
-      console.log(dataToInsert);
     }
   };
 
@@ -161,7 +160,6 @@ export default function AppContainer(props: any) {
       );
     }
   };
-  console.log("appContainer");
   return (
     <AppShell
       styles={{

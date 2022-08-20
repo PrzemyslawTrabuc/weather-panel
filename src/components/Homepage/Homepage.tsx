@@ -39,7 +39,6 @@ const Homepage=(props:any)=>{
 
     const handleAddToFavButtonClick = async() =>{
          const response = await props.addFavCity(userId,homepageWeather.name);
-         console.log(response);
     }
 
     return(

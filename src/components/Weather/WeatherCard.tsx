@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Text, Button, Group, Badge, LoadingOverlay, Transition, Space, Title } from '@mantine/core';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState, AppDispatch } from '../../store/store';
+import type { RootState } from '../../store/store';
 import { showNotification } from '@mantine/notifications';
-import { Windsock, Cloud, Thermometer, DropletFilled2 } from "tabler-icons-react";
+import { Windsock, Cloud } from "tabler-icons-react";
 
 import WeatherIcon from './WeatherIcon';
 import { moveItemLeftInArray, moveItemRightInArray, deleteCityFromCities } from "../WeatherData/WeatherDataSlice";
@@ -66,7 +66,6 @@ const WeatherCard = (props: any) => {
   }
 
   const renderCard = () => {
-    console.log("weatherCard")
     return (
       <Transition mounted={animate} transition="fade" duration={300} timingFunction="ease">{
         (styles) =>

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { toggleMobileMenu, toggleDesktop } from './MobileMenuSwitchSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
-import {Burger, MediaQuery, Transition, useMantineTheme} from '@mantine/core';
+import {Burger, MediaQuery, useMantineTheme} from '@mantine/core';
 
 const MobileMenuSwitch = () =>{
     const theme = useMantineTheme();
