@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {MouseEventHandler, useEffect, useRef} from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import {
@@ -20,10 +20,11 @@ const ForecastCards = (props: any) => {
     const isModalOpen = useSelector((state: RootState) => state.Modal.isOpen);
     const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
     const theme = useMantineTheme();
-    const test = useRef();
+    const test = useRef<any>();
     const forecastScrollListPosition = useRef({left:0, x:0});
 
-    const mouseDownHandler = function (e:MouseEvent) {
+    const mouseDownHandler = (e:React.MouseEvent)=> {
+      if(test.current){
       forecastScrollListPosition.current = {
         left: test.current.scrollLeft,
         x: e.clientX
@@ -32,9 +33,10 @@ const ForecastCards = (props: any) => {
       document.addEventListener('mousemove', mouseMoveHandler);
       document.addEventListener('mouseup', mouseUpHandler);
       test.current.style.cursor="grabbing";
+    }
   };
 
-  const mouseMoveHandler = function (e) {
+  const mouseMoveHandler = function (e:MouseEvent) {
     // How far the mouse has been moved
     const dx = e.clientX - forecastScrollListPosition.current.x;
 
@@ -46,6 +48,7 @@ const ForecastCards = (props: any) => {
 const mouseUpHandler = function () {
   document.removeEventListener('mousemove', mouseMoveHandler);
   document.removeEventListener('mouseup', mouseUpHandler);
+  if(test.current)
   test.current.style.cursor="grab";
 };
 //TODO: fix types
@@ -68,7 +71,7 @@ const mouseUpHandler = function () {
                 {item.dt_txt.substring(5, 16)}
               </Title>
               <Center>
-                <WeatherIcon styles={{}} iconId={item.weather[0].icon} />
+                <WeatherIcon iconId={item.weather[0].icon} />
                 <Title align="center" order={2}>
                   {item.main.temp} °C
                 </Title>
