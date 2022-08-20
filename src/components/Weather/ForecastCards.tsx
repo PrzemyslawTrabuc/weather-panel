@@ -107,8 +107,12 @@ const mouseUpHandler = function () {
       <>
         <List style={{ whiteSpace: "nowrap",width:"95%", marginLeft:"auto", marginRight:"auto", cursor:"grab"}}>
           <Center>
-            <ScrollArea onMouseDown={mouseDownHandler} viewportRef={test} offsetScrollbars style={{ height: 300}}>
-              {buildDaysForecastList(40)}
+            <ScrollArea viewportRef={test} offsetScrollbars style={{ height: 300}}>
+              <div 
+                onMouseDown={mouseDownHandler}
+              >
+                {buildDaysForecastList(40)}
+              </div>
             </ScrollArea>
           </Center>
         </List>
