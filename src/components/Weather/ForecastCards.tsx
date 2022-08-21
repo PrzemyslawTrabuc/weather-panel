@@ -20,19 +20,18 @@ const ForecastCards = (props: any) => {
     const isModalOpen = useSelector((state: RootState) => state.Modal.isOpen);
     const isDarkModeOn = useSelector((state: RootState) => state.DarkModeSwitch.isDarkModeOn);
     const theme = useMantineTheme();
-    const test = useRef<any>();
+    const scrollDivRef = useRef<any>();
     const forecastScrollListPosition = useRef({left:0, x:0});
 
     const mouseDownHandler = (e:React.MouseEvent)=> {
-      if(test.current){
+      if(scrollDivRef.current){
       forecastScrollListPosition.current = {
-        left: test.current.scrollLeft,
+        left: scrollDivRef.current.scrollLeft,
         x: e.clientX
       }  
-      console.log(forecastScrollListPosition.current.left)
       document.addEventListener('mousemove', mouseMoveHandler);
       document.addEventListener('mouseup', mouseUpHandler);
-      test.current.style.cursor="grabbing";
+      scrollDivRef.current.style.cursor="grabbing";
     }
   };
 
@@ -40,18 +39,18 @@ const ForecastCards = (props: any) => {
     // How far the mouse has been moved
     const dx = e.clientX - forecastScrollListPosition.current.x;
 
-    if(test.current)
-    test.current.scrollLeft = forecastScrollListPosition.current.left - dx;
+    if(scrollDivRef.current)
+    scrollDivRef.current.scrollLeft = forecastScrollListPosition.current.left - dx;
    
 };
-
+console = console
 const mouseUpHandler = function () {
   document.removeEventListener('mousemove', mouseMoveHandler);
   document.removeEventListener('mouseup', mouseUpHandler);
-  if(test.current)
-  test.current.style.cursor="grab";
+  if(scrollDivRef.current)
+  scrollDivRef.current.style.cursor="grab";
 };
-//TODO: fix types
+
   const buildDaysForecastList = (numberOfCards: number) => {
     const reducedForecast = props.forecastData.list.slice(0, numberOfCards);
     const listToRender = reducedForecast.map((item: any) => (
@@ -101,13 +100,12 @@ const mouseUpHandler = function () {
     ));
     return listToRender;
   };
-
   if (Object.keys(props.forecastData).length > 0)
     return (
       <>
         <List style={{ whiteSpace: "nowrap",width:"95%", marginLeft:"auto", marginRight:"auto", cursor:"grab"}}>
           <Center>
-            <ScrollArea viewportRef={test} offsetScrollbars style={{ height: 300}}>
+            <ScrollArea viewportRef={scrollDivRef} offsetScrollbars style={{ height: 300}}>
               <div 
                 onMouseDown={mouseDownHandler}
               >
