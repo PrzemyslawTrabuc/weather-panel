@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import {
   AppShell,
   Navbar,
@@ -10,7 +10,7 @@ import {
   Transition,
   Group,
   NavLink,
-  Space
+  Space,
 } from "@mantine/core";
 
 import { BrandGithub } from "tabler-icons-react";
@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import db from "../../api/firebase";
-import { showNotification } from '@mantine/notifications';
+import { showNotification } from "@mantine/notifications";
 
 import MobileMenuSwitch from "../MobileMenu/MobileMenuSwitch";
 import Homepage from "../Homepage/Homepage";
@@ -27,9 +27,7 @@ import { toggleMobileMenu } from "../MobileMenu/MobileMenuSwitchSlice";
 import LogoutButton from "../GoogleAuth/LogoutButton";
 import UsersWeatherCards from "../FavouriteCities/UsersWeatherCards";
 import RightMenu from "./RightMenu";
-import {
-  addNewCityToWeatherData,
-} from "../WeatherData/WeatherDataSlice";
+import { addNewCityToWeatherData } from "../WeatherData/WeatherDataSlice";
 import {
   setNumberOfFavUsersCities,
   setUserFavCities,
@@ -80,19 +78,17 @@ export default function AppContainer(props: any) {
         dispatch(setUserFavCities(dataToInsert));
         showNotification({
           icon: <i className="fa-solid fa-check"></i>,
-          color:"green",
+          color: "green",
           title: `City "${cityName}" has been added to your list `,
-          message: 'City correctly deleted from your list',
-        })
-      } else 
-        return(
-          showNotification({
-            icon: <i className="fa-solid fa-info"></i>,
-            color:"cyan",
-            title: `City "${cityName}" is already on Favourite List`,
-            message: 'Check your list!',
-          })
-        );
+          message: "City correctly deleted from your list",
+        });
+      } else
+        return showNotification({
+          icon: <i className="fa-solid fa-info"></i>,
+          color: "cyan",
+          title: `City "${cityName}" is already on Favourite List`,
+          message: "Check your list!",
+        });
     }
   };
 
