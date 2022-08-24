@@ -28,7 +28,6 @@ const SearchForm = (props: any) => {
   ) => {
     event.preventDefault();
     if (searchValue.toLowerCase() !== props.cityOnHomePage.toLowerCase()) {
-      console.log(searchValue, props.cityOnHomePage);
       dispatch(fetchWeatherForHomePage(cityName));
       dispatch(fetchForecastForHomePage(cityName));
     } else {
