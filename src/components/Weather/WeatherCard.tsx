@@ -145,7 +145,7 @@ const WeatherCard = (props: any) => {
               className="weatherCard"
               shadow="sm"
               p="lg"
-              style={{ width: !isDesktop ? "90vw" : "385px" }}
+              style={{ width: !isDesktop ? "90vw" : "380px" }}
             >
               <LoadingOverlay visible={!isWeatherDataFetched} />
               <Card.Section>
