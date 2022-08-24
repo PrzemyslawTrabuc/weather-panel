@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   Text,
@@ -131,6 +131,7 @@ const WeatherCard = (props: any) => {
   };
 
   const renderCard = () => {
+    console.log(props.weatherData.name + "card");
     return (
       <Transition
         mounted={animate}
