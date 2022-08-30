@@ -3,7 +3,7 @@ import SearchForm from "./SearchForm";
 import {
   fetchWeatherForHomePage,
   fetchForecastForHomePage,
-} from "../Weather/HomePageWeatherSlice";
+} from "../WeatherData/HomePageWeatherSlice";
 import type { RootState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import getCookie from "../../utils/getCookie";

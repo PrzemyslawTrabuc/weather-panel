@@ -69,35 +69,35 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { apiKey, baseUrl } from "../../api/WeatherAPI";
 
-export interface SwapCities{
-  cityIndexInArrayToChange: number,
-  cityWeatherToUseAsTemp: any, 
-  cityForecastToUseAsTemp: any
+export interface SwapCities {
+  cityIndexInArrayToChange: number;
+  cityWeatherToUseAsTemp: any;
+  cityForecastToUseAsTemp: any;
 }
 
-export interface Time{
-  hour: string,
-  minutes:string
+export interface Time {
+  hour: string;
+  minutes: string;
 }
 
 export interface WeatherData {
   isFetched: boolean;
   numberOfCities: number;
   fetchError: string;
-  weather:any;
-  forecast:any;
-  highestTemperature:number | null;
-  lowestTemperature:number | null;
+  weather: any;
+  forecast: any;
+  highestTemperature: number | null;
+  lowestTemperature: number | null;
 }
 
 const initialState: WeatherData = {
   isFetched: false,
   numberOfCities: 0,
   fetchError: "no error",
-  weather: {gatheredData: []},
-  forecast: {gatheredData: []},
+  weather: { gatheredData: [] },
+  forecast: { gatheredData: [] },
   highestTemperature: null,
-  lowestTemperature: null
+  lowestTemperature: null,
 };
 
 const fetchWeatherThunk = createAsyncThunk(
@@ -114,7 +114,6 @@ const fetchWeatherThunk = createAsyncThunk(
       if (response.ok === true) {
         responseOkStatus = true;
         gatheredData.push(data);
-
       } else {
         responseToReturn = data;
       }
@@ -140,7 +139,6 @@ const fetchForecastThunk = createAsyncThunk(
       if (response.ok === true) {
         responseOkStatus = true;
         gatheredData.push(data);
-
       } else {
         responseToReturn = data;
       }
@@ -148,8 +146,7 @@ const fetchForecastThunk = createAsyncThunk(
     if (responseOkStatus === false) {
       return { responseToReturn, responseOkStatus };
     }
-    if (responseOkStatus === true) 
-      return { gatheredData, responseOkStatus };
+    if (responseOkStatus === true) return { gatheredData, responseOkStatus };
   }
 );
 
@@ -159,16 +156,16 @@ const fetchSingleWeatherThunk = createAsyncThunk(
     let cityData: any = [];
     let responseOkStatus: boolean = false;
     let responseToReturn: any = null;
-      const response = await fetch(
-        `${baseUrl}weather?&units=metric&q=${cityName}&appid=${apiKey}`
-      );
-      const data = await response.json();
-      if (response.ok === true) {
-        responseOkStatus = true;
-        cityData.push(data);
-      } else {
-        responseToReturn = data;
-      }
+    const response = await fetch(
+      `${baseUrl}weather?&units=metric&q=${cityName}&appid=${apiKey}`
+    );
+    const data = await response.json();
+    if (response.ok === true) {
+      responseOkStatus = true;
+      cityData.push(data);
+    } else {
+      responseToReturn = data;
+    }
     if (responseOkStatus === false) {
       return { responseToReturn, responseOkStatus };
     }
@@ -182,38 +179,62 @@ export const WeatherData = createSlice({
   reducers: {
     deleteCityFromCities: (state: any, action: PayloadAction<number>) => {
       state.numberOfCities -= 1;
-      state.weather.gatheredData.splice(action.payload,1);
-      state.forecast.gatheredData.splice(action.payload,1);
+      state.weather.gatheredData.splice(action.payload, 1);
+      state.forecast.gatheredData.splice(action.payload, 1);
     },
-    clearWeatherData:(state:any)=>{
+    clearWeatherData: (state: any) => {
       state.numberOfCities = 0;
       state.isFetched = false;
     },
-    moveItemLeftInArray(state: any, action: PayloadAction<SwapCities>){
-      if(state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1]){
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1];
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange-1] = action.payload.cityWeatherToUseAsTemp;
-        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange] = state.forecast.gatheredData[action.payload.cityIndexInArrayToChange-1];
-        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange-1] = action.payload.cityForecastToUseAsTemp;    
+    moveItemLeftInArray(state: any, action: PayloadAction<SwapCities>) {
+      if (
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange - 1]
+      ) {
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] =
+          state.weather.gatheredData[
+            action.payload.cityIndexInArrayToChange - 1
+          ];
+        state.weather.gatheredData[
+          action.payload.cityIndexInArrayToChange - 1
+        ] = action.payload.cityWeatherToUseAsTemp;
+        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange] =
+          state.forecast.gatheredData[
+            action.payload.cityIndexInArrayToChange - 1
+          ];
+        state.forecast.gatheredData[
+          action.payload.cityIndexInArrayToChange - 1
+        ] = action.payload.cityForecastToUseAsTemp;
       }
     },
-    moveItemRightInArray(state: any, action: PayloadAction<SwapCities>){
-      if(state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1]){
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] = state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1];
-        state.weather.gatheredData[action.payload.cityIndexInArrayToChange+1] = action.payload.cityWeatherToUseAsTemp;    
-        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange] = state.forecast.gatheredData[action.payload.cityIndexInArrayToChange+1];
-        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange+1] = action.payload.cityForecastToUseAsTemp;    
+    moveItemRightInArray(state: any, action: PayloadAction<SwapCities>) {
+      if (
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange + 1]
+      ) {
+        state.weather.gatheredData[action.payload.cityIndexInArrayToChange] =
+          state.weather.gatheredData[
+            action.payload.cityIndexInArrayToChange + 1
+          ];
+        state.weather.gatheredData[
+          action.payload.cityIndexInArrayToChange + 1
+        ] = action.payload.cityWeatherToUseAsTemp;
+        state.forecast.gatheredData[action.payload.cityIndexInArrayToChange] =
+          state.forecast.gatheredData[
+            action.payload.cityIndexInArrayToChange + 1
+          ];
+        state.forecast.gatheredData[
+          action.payload.cityIndexInArrayToChange + 1
+        ] = action.payload.cityForecastToUseAsTemp;
       }
     },
-    addNewCityToWeatherData(state:any, action:PayloadAction<any>){
+    addNewCityToWeatherData(state: any, action: PayloadAction<any>) {
       state.weather.gatheredData.push(action.payload.weather);
       state.forecast.gatheredData.push(action.payload.forecast);
       state.numberOfCities++;
     },
-    setHighestTemperature(state:any, action:PayloadAction<number>){
+    setHighestTemperature(state: any, action: PayloadAction<number>) {
       state.highestTemperature = action.payload;
     },
-    setLowestTemperature(state:any, action:PayloadAction<number>){
+    setLowestTemperature(state: any, action: PayloadAction<number>) {
       state.lowestTemperature = action.payload;
     },
   },
@@ -224,11 +245,11 @@ export const WeatherData = createSlice({
         state.weather = action.payload;
         state.numberOfCities = action.payload.gatheredData.length;
         state.isFetched = true;
-        return
+        return;
       }
-      if (action.payload && !action.payload.responseOkStatus){
+      if (action.payload && !action.payload.responseOkStatus) {
         state.fetchError = action.payload.responseToReturn;
-        state.isFetched = false;   
+        state.isFetched = false;
       }
     });
     builder.addCase(fetchWeatherThunk.pending, (state, action) => {
@@ -242,17 +263,25 @@ export const WeatherData = createSlice({
         state.forecast = action.payload;
         state.numberOfCities = action.payload.gatheredData.length;
         state.isFetched = true;
-        return
+        return;
       }
       if (action.payload && !action.payload.responseOkStatus)
-        state.fetchError = action.payload.responseToReturn;   
-        state.isFetched = false;
+        state.fetchError = action.payload.responseToReturn;
+      state.isFetched = false;
     });
-  },  
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const { deleteCityFromCities, clearWeatherData, moveItemLeftInArray, moveItemRightInArray, addNewCityToWeatherData, setHighestTemperature, setLowestTemperature } = WeatherData.actions;
+export const {
+  deleteCityFromCities,
+  clearWeatherData,
+  moveItemLeftInArray,
+  moveItemRightInArray,
+  addNewCityToWeatherData,
+  setHighestTemperature,
+  setLowestTemperature,
+} = WeatherData.actions;
 export { fetchWeatherThunk, fetchForecastThunk };
 
 export default WeatherData.reducer;

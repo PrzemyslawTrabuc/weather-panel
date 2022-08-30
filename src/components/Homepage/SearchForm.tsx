@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchWeatherForHomePage,
   fetchForecastForHomePage,
-} from "../Weather/HomePageWeatherSlice";
+} from "../WeatherData/HomePageWeatherSlice";
 import { showNotification } from "@mantine/notifications";
 import { set } from "immer/dist/internal";
 
