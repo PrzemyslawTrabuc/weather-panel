@@ -174,8 +174,7 @@ export default function AppContainer(props: any) {
         <Transition
           mounted={isDesktop ? true : isMenuOpen}
           transition="fade"
-          duration={300}
-          exitDuration={300}
+          duration={150}
         >
           {(styles) => (
             <Navbar
