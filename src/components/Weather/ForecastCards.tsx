@@ -1,4 +1,10 @@
-import React, { MouseEventHandler, useEffect, useRef } from "react";
+import React, {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import {
@@ -24,6 +30,18 @@ const ForecastCards = (props: any) => {
   const theme = useMantineTheme();
   const scrollDivRef = useRef<any>();
   const forecastScrollListPosition = useRef({ left: 0, x: 0 });
+  const [numberOfCards, setNumberfCards] = useState<number>(10);
+
+  const handleScroll = () => {
+    if (
+      scrollDivRef.current.scrollWidth - scrollDivRef.current.offsetWidth ===
+        scrollDivRef.current.scrollLeft &&
+      numberOfCards < 40
+    ) {
+      setNumberfCards(numberOfCards + 10);
+    }
+  };
+  console.log("ForecastCards" + numberOfCards);
 
   const mouseDownHandler = (e: React.MouseEvent) => {
     if (scrollDivRef.current) {
@@ -45,7 +63,6 @@ const ForecastCards = (props: any) => {
       scrollDivRef.current.scrollLeft =
         forecastScrollListPosition.current.left - dx;
   };
-  console = console;
   const mouseUpHandler = function () {
     document.removeEventListener("mousemove", mouseMoveHandler);
     document.removeEventListener("mouseup", mouseUpHandler);
@@ -128,9 +145,10 @@ const ForecastCards = (props: any) => {
               viewportRef={scrollDivRef}
               offsetScrollbars
               style={{ height: 300 }}
+              onScrollPositionChange={handleScroll}
             >
               <div onMouseDown={mouseDownHandler}>
-                {buildDaysForecastList(40)}
+                {buildDaysForecastList(numberOfCards)}
               </div>
             </ScrollArea>
           </Center>

@@ -131,7 +131,6 @@ const WeatherCard = (props: any) => {
   };
 
   const renderCard = () => {
-    console.log(props.weatherData.name + "card");
     return (
       <Transition
         mounted={animate}
