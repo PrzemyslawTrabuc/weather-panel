@@ -34,8 +34,8 @@ const ForecastCards = (props: any) => {
 
   const handleScroll = () => {
     if (
-      scrollDivRef.current.scrollWidth - scrollDivRef.current.offsetWidth ===
-        scrollDivRef.current.scrollLeft &&
+      scrollDivRef.current.scrollWidth - scrollDivRef.current.offsetWidth <
+        scrollDivRef.current.scrollLeft + 10 &&
       numberOfCards < 40
     ) {
       setNumberfCards(numberOfCards + 10);
