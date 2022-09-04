@@ -41,7 +41,6 @@ const ForecastCards = (props: any) => {
       setNumberfCards(numberOfCards + 10);
     }
   };
-  console.log("ForecastCards" + numberOfCards);
 
   const mouseDownHandler = (e: React.MouseEvent) => {
     if (scrollDivRef.current) {
