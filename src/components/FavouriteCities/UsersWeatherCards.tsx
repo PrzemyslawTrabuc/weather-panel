@@ -148,7 +148,6 @@ const UsersWeatherCards = (props: any) => {
       return items;
     }
   };
-  console.log("userWeatherCards");
 
   const renderWeatherCards = () => {
     if (props.isWeatherDataFetched && numberOfFavUsersCities > 0)
