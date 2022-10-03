@@ -7,7 +7,7 @@ import {
   fetchForecastForHomePage,
 } from "../WeatherData/HomePageWeatherSlice";
 import { showNotification } from "@mantine/notifications";
-import { set } from "immer/dist/internal";
+import { Search } from "tabler-icons-react";
 
 const SearchForm = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -50,13 +50,21 @@ const SearchForm = (props: any) => {
       <Container size="lg" px="xl">
         {/* <form onSubmit={(event) => onSubmit(searchValue, event)}> */}
         <form onSubmit={(event) => onSubmit(searchValue, event)}>
-          <Group position="center">
+          <Group position="center" grow>
             <TextInput
               placeholder="Enter city name"
+              size="lg"
               required
               onChange={(event) => onChange(event)}
+              sx={{ minWidth: "100%" }}
             />
-            <Button type="submit">Search</Button>
+            <Button
+              size="md"
+              sx={{ marginLeft: "-70px", maxWidth: "50px", padding: 0 }}
+              type="submit"
+            >
+              <Search size={32}></Search>
+            </Button>
           </Group>
         </form>
       </Container>
