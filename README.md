@@ -16,7 +16,7 @@ https://przemyslawtrabuc.github.io/weather-panel/
 - saving city for users
 - sign in with google
 - managing the order of cities
-- saving settings and chat in local storage
+- saving settings in local storage
 - indicating if current city is on favourite list
 - toast notifications of users' actions
 
