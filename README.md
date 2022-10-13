@@ -17,6 +17,8 @@ https://przemyslawtrabuc.github.io/weather-panel/
 - sign in with google
 - managing the order of cities
 - saving settings and chat in local storage
+- indicating if current city is on favourite list
+- toast notifications of users' actions
 
 
 ## Tech Stack
@@ -28,11 +30,13 @@ https://przemyslawtrabuc.github.io/weather-panel/
 
 ## Screenshots
 
-![App Screenshot](S1)
-![App Screenshot](S2)
-![App Screenshot](S3)
-![App Screenshot](S4)
-![App Screenshot](S5)
-![App Screenshot](S6)
-![App Screenshot](S7)
+![App Screenshot](S1.png)
+![App Screenshot](S2.png)
+![App Screenshot](S3.png)
+![App Screenshot](S4.png)
+![App Screenshot](S5.png)
+![App Screenshot](S6.png)
+![App Screenshot](S7.png)
+![App Screenshot](S8.png)
+![App Screenshot](S9.png)
 
