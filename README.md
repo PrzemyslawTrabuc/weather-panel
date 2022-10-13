@@ -23,7 +23,7 @@ https://przemyslawtrabuc.github.io/weather-panel/
 
 ## Tech Stack
 
-**Client:** React, Redux, RTK, React Router, Mantine, Vite
+**Client:** React, Redux, RTK, React Router, Mantine, Vite (first vitest tests)
 
 **API:** OpenWeather https://openweathermap.org/api
 
