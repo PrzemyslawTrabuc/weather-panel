@@ -27,6 +27,8 @@ https://przemyslawtrabuc.github.io/weather-panel/
 
 **API:** OpenWeather https://openweathermap.org/api
 
+**Databse** Firebase
+
 
 ## Screenshots
 
